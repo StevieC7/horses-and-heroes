@@ -29,7 +29,7 @@ GAME FLOW
 // -deck arrays (consist of card objects)
 // -player hand array
 // -cpu hand array
-// -individual card healths for cards in play (should default to original card object values in the constants)
+// -play area array (what cards are in play and where, how much health they have, any other modifiers)
 
 // Select HTML elements that will be used more than once
 // -play area
