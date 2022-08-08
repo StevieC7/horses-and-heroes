@@ -58,9 +58,10 @@ console.log(cardList);
 // -play area array (what cards are in play and where, how much health they have, any other modifiers)
 let score;
 let horseDeckCards = [];
+let heroDeckCards = [];
 let playerDeckCards = [];
 let cpuDeckCards = [];
-let playerHandCards = [];
+let playerHandCards = ["TEST VALUE"];
 let cpuHandCards = [];
 let playAreaCards = []; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
 
@@ -80,13 +81,28 @@ const horseDeck = document.querySelector("#horse-deck");
 const heroDeck = document.querySelector("#hero-deck");
 const scoreMeter = document.querySelector("#score");
 const gameLog = document.querySelector("#game-log");
-console.log(playArea,cpuPlayArea,playerPlayArea,playerHand,cpuHand,horseDeck,heroDeck,scoreMeter,gameLog);
-
 // Add event listeners
 // -cards in hand
 // -play area
 // -decks
 // -card inspector
+horseDeck.addEventListener("click",drawHorse);
+heroDeck.addEventListener("click",drawHero);
+// below listener makes sure the card the user is hovering over will peek out a bit
+playerHand.addEventListener("mouseover", event => {
+    for (let i = 0; playerHandCards.length; i++) {
+        if (event.target !== playerHand.children[i])
+    }
+})
+// below listener makes sure only the card the user is clicking on will get inspected
+playerHand.addEventListener("click", event => {
+    for (let i = 0; i < playerHandCards.length; i++) {
+        if (event.target !== playerHand.children[i]) {
+            return;
+        }
+        inspectCard();
+    }
+});
 
 // Invoke init function to initialize state variables
 
