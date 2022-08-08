@@ -195,6 +195,7 @@ cpuPlayArea.addEventListener("mouseover", event => {
         inspectCard(cpuPlayAreaCards[i]);
     };
 });
+// TODO: refactor playerPlayArea event listeners to apply them individually to the three possible child divs with class "card-slot"
 // below event listener ensures the card the user hovers over on the player's board gets inspected
 playerPlayArea.addEventListener("mouseover", event => {
     console.log("playerPlayArea mouseover fired.");
@@ -331,6 +332,15 @@ function render() {
     });
     playerHandListener();
     // update play area
+    while (playerPlayArea.lastChild) {
+        playerPlayArea.removeChild(playerPlayArea.lastChild);
+    };
+    playerPlayAreaCards.forEach((val) => {
+        const playerPlayAreaCardElement = document.createElement("div");
+        playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
+        playerPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+        playerPlayArea.append(playerPlayAreaCardElement);
+    });
     // update cpu hand
     // update game log
     // update horse deck
