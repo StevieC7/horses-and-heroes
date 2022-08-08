@@ -86,12 +86,15 @@ const gameLog = document.querySelector("#game-log");
 // -play area
 // -decks
 // -card inspector
-horseDeck.addEventListener("click",drawHorse);
-heroDeck.addEventListener("click",drawHero);
+horseDeck.addEventListener("click",drawHorse());
+heroDeck.addEventListener("click",drawHero());
 // below listener makes sure the card the user is hovering over will peek out a bit
 playerHand.addEventListener("mouseover", event => {
     for (let i = 0; playerHandCards.length; i++) {
-        if (event.target !== playerHand.children[i])
+        if (event.target !== playerHand.children[i]) {
+            return;
+        }
+        peekCard();
     }
 })
 // below listener makes sure only the card the user is clicking on will get inspected
