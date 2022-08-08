@@ -18,8 +18,6 @@ GAME FLOW
 5. Repeat play phase and fight phase until a player loses.
 */
 
-
-
 // Define constants
 // -card objects
 let cardList = [];
@@ -34,8 +32,7 @@ class Card {
     addToCardList () {
         cardList.push(this);
     }
-}
-
+};
 const horse = new Card("Horse",1,1,"Just a regular horse.","https://placekitten.com/200/300");
 horse.addToCardList();
 const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","https://placekitten.com/200/300");
@@ -57,6 +54,10 @@ console.log(cardList);
 // -cpu hand array
 // -play area array (what cards are in play and where, how much health they have, any other modifiers)
 let score;
+const turns = ["Player","CPU"];
+let turn;
+const phases = ["Setup","Draw","Play","Fight"];
+let currentPhase;
 let horseDeckCards = ["TEST VALUE"];
 let heroDeckCards = ["TEST VALUE"];
 let playerDeckCards = ["TEST VALUE"];
@@ -82,6 +83,24 @@ const horseDeck = document.querySelector("#horse-deck");
 const heroDeck = document.querySelector("#hero-deck");
 const scoreMeter = document.querySelector("#score");
 const gameLog = document.querySelector("#game-log");
+
+// Add functions called by event listeners (use arrow notation)
+const drawHorse = () => {
+    currentPhase = phases[2];
+};
+const drawHero = () => {
+    currentPhase = phases[2];
+};
+const inspectCard = () => {
+
+};
+const peekCard = () => {
+
+};
+const selectCard = () => {
+
+};
+
 // Add event listeners
 // -cards in hand
 // -play area
@@ -92,50 +111,70 @@ playerHand.addEventListener("mouseover", event => {
     for (let i = 0; playerHandCards.length; i++) {
         if (event.target !== playerHand.children[i]) {
             return;
-        }
+        };
         peekCard();
-    }
-})
+    };
+});
 // below event listener ensures only the hand card the user is clicking on gets inspected
 playerHand.addEventListener("click", event => {
     for (let i = 0; i < playerHandCards.length; i++) {
         if (event.target !== playerHand.children[i]) {
             return;
-        }
+        };
         inspectCard();
         selectCard();
-    }
+    };
 });
 // below event listener ensures the card the user hovers over gets inspected
 cpuPlayArea.addEventListener("mouseover", event => {
     for (let i = 0; i < cpuPlayArea.children.length; i++) {
         if (event.target !== cpuPlayArea.children[i]) {
             return;
-        }
+        };
         inspectCard();
-    }
+    };
 });
 // below event listener ensures the card the user hovers over on the player's board gets inspected
 playerPlayArea.addEventListener("mouseover", event => {
     for (let i = 0; i < playerPlayArea.children.length; i++) {
         if (event.target !== playerPlayArea.children[i]) {
             return;
-        }
+        };
         inspectCard();
-    }
-})
+    };
+});
 // below event listener handles possibilities for the player's card slots
 playerPlayArea.addEventListener("click", event => {
     // if not user's turn, do nothing
+    if (turn !== "Player") {
+        return;
+    };
+    // if not play phase, do nothing
     // if user has not just clicked a card from hand, do nothing
     // if card slot is not empty and user has just clicked a horse card from hand, do nothing
     // if card slot has horse card and user has just clicked hero card from hand, play it
     // if card slot is empty and user has just clicked a horse card from hand, play it
     // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
-})
-
-horseDeck.addEventListener("click",drawHorse());
-heroDeck.addEventListener("click",drawHero());
+});
+// below events ensure user can draw during draw phase
+horseDeck.addEventListener("click", () => {
+    if (turn !== "Player") {
+        return;
+    };
+    if (currentPhase !== "Draw") {
+        return;
+    };
+    drawHorse();
+});
+heroDeck.addEventListener("click", () => {
+    if (turn !== "Player") {
+        return;
+    };
+    if (currentPhase !== "Draw") {
+        return;
+    };
+    drawHero();
+});
 
 // Invoke init function to initialize state variables
 
