@@ -86,18 +86,21 @@ const gameLog = document.querySelector("#game-log");
 
 // Add functions called by event listeners (use arrow notation)
 const drawHorse = () => {
+    playerHandCards.push(horse);
     currentPhase = phases[2];
 };
 const drawHero = () => {
+    playerHandCards.push(heroDeck[0]);
+    heroDeckCards.shift();
     currentPhase = phases[2];
 };
-const inspectCard = () => {
+const inspectCard = (card) => {
 
 };
-const peekCard = () => {
+const peekCard = (card) => {
 
 };
-const selectCard = () => {
+const selectCard = (card) => {
 
 };
 
