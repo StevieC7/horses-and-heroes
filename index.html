@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,25 +13,25 @@
         <h1>Horses and Heroes</h1>
     </header>
     <div id="grid-wrapper">
-        <section id = "score">Score</section>
-        <section id = "play-area">
-            <div class="sub-play-area">
+        <section id ="score">Score</section>
+        <section id="play-area">
+            <div class="sub-play-area" id="cpu-play-area">
                 <div class="card-slot">CPU card one</div>
                 <div class="card-slot">CPU card two</div>
                 <div class="card-slot">CPU card three</div>
             </div>
-            <div class="sub-play-area">
+            <div class="sub-play-area" id="player-play-area">
                 <div class="card-slot">Player card one</div>
                 <div class="card-slot">Player card two</div>
                 <div class="card-slot">Player card three</div>
             </div>
         </section>
-        <section id = "player-hand">Player Hand</section>  
-        <section id = "card-inspection">Card Inspection</section>  
-        <section id = "cpu-hand">CPU Hand</section>
-        <section id = "game-log">Game Log</section>
-        <section id = "horse-deck">Horse Deck</section>
-        <section id = "hero-deck">Hero Deck</section>
+        <section id="player-hand">Player Hand</section>  
+        <section id="card-inspection">Card Inspection</section>  
+        <section id="cpu-hand">CPU Hand</section>
+        <section id="game-log">Game Log</section>
+        <section id="horse-deck">Horse Deck</section>
+        <section id="hero-deck">Hero Deck</section>
     </div>
 </body>
 </html>

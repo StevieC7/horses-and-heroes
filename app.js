@@ -57,6 +57,7 @@ console.log(cardList);
 // -cpu hand array
 // -play area array (what cards are in play and where, how much health they have, any other modifiers)
 let score;
+let horseDeckCards = [];
 let playerDeckCards = [];
 let cpuDeckCards = [];
 let playerHandCards = [];
@@ -64,13 +65,23 @@ let cpuHandCards = [];
 let playAreaCards = []; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
 
 // Select HTML elements that will be used more than once
-// -play area
+// -play area (cpu and player)
 // -hands (cpu and player)
 // -cards
 // -decks
 // -score meter
 // -game log
-const playArea = document.querySelector()
+const playArea = document.querySelector("#play-area");
+const cpuPlayArea = document.querySelector("#cpu-play-area");
+const playerPlayArea = document.querySelector("#player-play-area");
+const playerHand = document.querySelector("#player-hand");
+const cpuHand = document.querySelector("#cpu-hand");
+const horseDeck = document.querySelector("#horse-deck");
+const heroDeck = document.querySelector("#hero-deck");
+const scoreMeter = document.querySelector("#score");
+const gameLog = document.querySelector("#game-log");
+console.log(playArea,cpuPlayArea,playerPlayArea,playerHand,cpuHand,horseDeck,heroDeck,scoreMeter,gameLog);
+
 // Add event listeners
 // -cards in hand
 // -play area
