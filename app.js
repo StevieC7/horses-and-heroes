@@ -57,13 +57,14 @@ console.log(cardList);
 // -cpu hand array
 // -play area array (what cards are in play and where, how much health they have, any other modifiers)
 let score;
-let horseDeckCards = [];
-let heroDeckCards = [];
-let playerDeckCards = [];
-let cpuDeckCards = [];
+let horseDeckCards = ["TEST VALUE"];
+let heroDeckCards = ["TEST VALUE"];
+let playerDeckCards = ["TEST VALUE"];
+let cpuDeckCards = ["TEST VALUE"];
 let playerHandCards = ["TEST VALUE"];
-let cpuHandCards = [];
-let playAreaCards = []; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
+let cpuHandCards = ["TEST VALUE"];
+let playAreaCards = ["TEST VALUE"]; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
+let selectedCard;
 
 // Select HTML elements that will be used more than once
 // -play area (cpu and player)
@@ -86,9 +87,7 @@ const gameLog = document.querySelector("#game-log");
 // -play area
 // -decks
 // -card inspector
-horseDeck.addEventListener("click",drawHorse());
-heroDeck.addEventListener("click",drawHero());
-// below listener makes sure the card the user is hovering over will peek out a bit
+// below event listener ensures the hand card the user is hovering over will peek out a bit
 playerHand.addEventListener("mouseover", event => {
     for (let i = 0; playerHandCards.length; i++) {
         if (event.target !== playerHand.children[i]) {
@@ -97,15 +96,46 @@ playerHand.addEventListener("mouseover", event => {
         peekCard();
     }
 })
-// below listener makes sure only the card the user is clicking on will get inspected
+// below event listener ensures only the hand card the user is clicking on gets inspected
 playerHand.addEventListener("click", event => {
     for (let i = 0; i < playerHandCards.length; i++) {
         if (event.target !== playerHand.children[i]) {
             return;
         }
         inspectCard();
+        selectCard();
     }
 });
+// below event listener ensures the card the user hovers over gets inspected
+cpuPlayArea.addEventListener("mouseover", event => {
+    for (let i = 0; i < cpuPlayArea.children.length; i++) {
+        if (event.target !== cpuPlayArea.children[i]) {
+            return;
+        }
+        inspectCard();
+    }
+});
+// below event listener ensures the card the user hovers over on the player's board gets inspected
+playerPlayArea.addEventListener("mouseover", event => {
+    for (let i = 0; i < playerPlayArea.children.length; i++) {
+        if (event.target !== playerPlayArea.children[i]) {
+            return;
+        }
+        inspectCard();
+    }
+})
+// below event listener handles possibilities for the player's card slots
+playerPlayArea.addEventListener("click", event => {
+    // if not user's turn, do nothing
+    // if user has not just clicked a card from hand, do nothing
+    // if card slot is not empty and user has just clicked a horse card from hand, do nothing
+    // if card slot has horse card and user has just clicked hero card from hand, play it
+    // if card slot is empty and user has just clicked a horse card from hand, play it
+    // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
+})
+
+horseDeck.addEventListener("click",drawHorse());
+heroDeck.addEventListener("click",drawHero());
 
 // Invoke init function to initialize state variables
 
