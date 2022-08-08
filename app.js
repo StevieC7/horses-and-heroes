@@ -64,7 +64,8 @@ let playerDeckCards = ["TEST VALUE"];
 let cpuDeckCards = ["TEST VALUE"];
 let playerHandCards = ["TEST VALUE"];
 let cpuHandCards = ["TEST VALUE"];
-let playAreaCards = ["TEST VALUE"]; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
+let cpuPlayAreaCards = ["TEST VALUE"]; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
+let playerPlayAreaCards = ["TEST VALUE"]; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
 let selectedCard;
 
 // Select HTML elements that will be used more than once
@@ -95,13 +96,15 @@ const drawHero = () => {
     currentPhase = phases[2];
 };
 const inspectCard = (card) => {
-
+    // remove any existing card element from the inspection zone
+    // append the targeted card into the inspection zone
 };
 const peekCard = (card) => {
-
+    // remove peek set on any other card elements
+    // add peek effect to targeted card element by moving it up and to the left slightly
 };
 const selectCard = (card) => {
-
+    selectedCard = card;
 };
 
 // Add event listeners
@@ -115,7 +118,7 @@ playerHand.addEventListener("mouseover", event => {
         if (event.target !== playerHand.children[i]) {
             return;
         };
-        peekCard();
+        peekCard(event.target);
     };
 });
 // below event listener ensures only the hand card the user is clicking on gets inspected
@@ -124,8 +127,8 @@ playerHand.addEventListener("click", event => {
         if (event.target !== playerHand.children[i]) {
             return;
         };
-        inspectCard();
-        selectCard();
+        inspectCard(playerHandCards[i]);
+        selectCard(playerHandCards[i]);
     };
 });
 // below event listener ensures the card the user hovers over gets inspected
@@ -134,7 +137,7 @@ cpuPlayArea.addEventListener("mouseover", event => {
         if (event.target !== cpuPlayArea.children[i]) {
             return;
         };
-        inspectCard();
+        inspectCard(cpuPlayAreaCards[i]);
     };
 });
 // below event listener ensures the card the user hovers over on the player's board gets inspected
@@ -143,7 +146,7 @@ playerPlayArea.addEventListener("mouseover", event => {
         if (event.target !== playerPlayArea.children[i]) {
             return;
         };
-        inspectCard();
+        inspectCard(playerPlayAreaCards[i]);
     };
 });
 // below event listener handles possibilities for the player's card slots
