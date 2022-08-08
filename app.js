@@ -2,20 +2,20 @@
 WIN CONDITION
 -If the score meter maxes out at 5 on a player's side, that player loses.
 GAME FLOW
-1. Decks shuffled and set for play
-2. Players draw their hands
-3. Play phase
+0. Decks shuffled and set for play
+1. Players draw their hands
+2. Play phase
     -(expect first turn) Player draws either a horse or a hero card. The horse deck is an unlimited supply.
     -Player may play as many cards in one turn as there are available spots on their side of the board.
     -Player may play a horse into an empty spot. Horses are weak, but necessary to play heroes.
     -Player may play a hero onto a horse, but not onto an empty spot. If played onto horse, the mounted horse is removed from play.
-4. Fight phase
+3. Fight phase
     -Player's cards are compared against CPU's, one by one
     -The cards' attack powers reduce their opposing card's health
     -If a card loses all health, it is discarded
     -If a card opposes an empty spot, its attack power is applied against the player/cpu score meter
     -If a card's attack causes either player's score to cross the "loss" threshold, that player loses.
-5. Repeat play phase and fight phase until a player loses.
+4. Repeat play phase and fight phase until a player loses.
 */
 
 // Define constants
@@ -48,42 +48,36 @@ stonewall.addToCardList();
 console.log(cardList);
 
 // Define state variables w/o values (leave that for init function)
-// -score
-// -deck arrays (consist of card objects)
-// -player hand array
-// -cpu hand array
-// -play area array (what cards are in play and where, how much health they have, any other modifiers)
 let score;
 const turns = ["Player","CPU"];
 let turn;
 const phases = ["Setup","Draw","Play","Fight"];
 let currentPhase;
-let horseDeckCards = ["TEST VALUE"];
-let heroDeckCards = ["TEST VALUE"];
-let playerDeckCards = ["TEST VALUE"];
+let horseDeckCards;
+let heroDeckCards;
 let cpuDeckCards = ["TEST VALUE"];
 let playerHandCards = ["TEST VALUE"];
 let cpuHandCards = ["TEST VALUE"];
-let cpuPlayAreaCards = ["TEST VALUE"]; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
-let playerPlayAreaCards = ["TEST VALUE"]; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
+let playerPlayAreaCards = ["TEST VALUE"];
+let cpuPlayAreaCards = ["TEST VALUE"];
+let inspectedCard;
+let peekedCard;
 let selectedCard;
 
 // Select HTML elements that will be used more than once
-// -play area (cpu and player)
-// -hands (cpu and player)
-// -cards
-// -decks
-// -score meter
-// -game log
 const playArea = document.querySelector("#play-area");
 const cpuPlayArea = document.querySelector("#cpu-play-area");
 const playerPlayArea = document.querySelector("#player-play-area");
 const playerHand = document.querySelector("#player-hand");
+const cardInspection = document.querySelector("#card-inspection");
 const cpuHand = document.querySelector("#cpu-hand");
 const horseDeck = document.querySelector("#horse-deck");
 const heroDeck = document.querySelector("#hero-deck");
 const scoreMeter = document.querySelector("#score");
 const gameLog = document.querySelector("#game-log");
+const startButton = document.querySelector("#start-button");
+const resetButton = document.querySelector("#reset-button");
+const endTurnButton = document.querySelector("#end-turn-button");
 
 // Add functions called by event listeners (use arrow notation)
 const drawHorse = () => {
@@ -96,29 +90,61 @@ const drawHero = () => {
     currentPhase = phases[2];
 };
 const inspectCard = (card) => {
-    // remove any existing card element from the inspection zone
-    // append the targeted card into the inspection zone
+    inspectedCard = card;
 };
-const peekCard = (card) => {
-    // remove peek set on any other card elements
-    // add peek effect to targeted card element by moving it up and to the left slightly
+const peekCard = (cardIndex) => {
+    peekedCard = cardIndex;
 };
 const selectCard = (card) => {
     selectedCard = card;
 };
+const randomizeHeroDeck = () => {
+    // randomize the player's hero deck and return an array of cards
+    // TEST VALUE below
+    return [horse, gregor,sirstabsalot,gregor,horse];
+}
+const randomizeCpuCards = () => {
+    // randomize the CPU's cards and return an array of cards
+    // TEST VALUE below
+    return [horse, gregor,sirstabsalot,gregor,horse];
+}
+const playerDrawCards = () => {
+    // always draw one horse
+    // randomly draw either horses or heroes for the rest of the cards
+    // TEST VALUE below
+    return [horse, gregor,sirstabsalot,gregor,horse];
+}
+const cpuDrawCards = () => {
+    // treat cpu the same way as player draw
+    // TEST VALUE below
+    return [horse, gregor,sirstabsalot,gregor,horse];
+}
+const resetGame = () => {
+    // check if user is sure
+    prompt("Are you sure?");
+    // if confirmation received, reset the game
+    if (prompt.value === "Y") {
+        init();
+    };
+}
+const endTurn = () => {
+    currentPhase = phases[3];
+}
 
 // Add event listeners
 // -cards in hand
 // -play area
 // -decks
 // -card inspector
+// -start button
+// -reset button
 // below event listener ensures the hand card the user is hovering over will peek out a bit
 playerHand.addEventListener("mouseover", event => {
     for (let i = 0; playerHandCards.length; i++) {
         if (event.target !== playerHand.children[i]) {
             return;
         };
-        peekCard(event.target);
+        peekCard(i);
     };
 });
 // below event listener ensures only the hand card the user is clicking on gets inspected
@@ -156,11 +182,38 @@ playerPlayArea.addEventListener("click", event => {
         return;
     };
     // if not play phase, do nothing
+    if (currentPhase !== "Play") {
+        return;
+    };
     // if user has not just clicked a card from hand, do nothing
-    // if card slot is not empty and user has just clicked a horse card from hand, do nothing
-    // if card slot has horse card and user has just clicked hero card from hand, play it
-    // if card slot is empty and user has just clicked a horse card from hand, play it
-    // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
+    if (selectedCard === null) {
+        return;
+    };
+    for (let i = 0; i < playerPlayAreaCards.length; i++) {
+        if (event.target !== playerPlayArea.children[i]) {
+            return;
+        };
+        // if card slot is not empty and user has just clicked a horse card from hand, do nothing
+        if (playerPlayAreaCards[i] !== null && selectedCard.name === "Horse") {
+            return;
+        };
+        // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
+        if (playerPlayAreaCards[i].name === "Horse" && selectedCard.name !== "Horse") {
+            playerPlayAreaCards.splice(i,1,selectedCard);
+            playerHandCards.splice(playerHandCards[i],1);
+            return;
+        };
+        // if card slot is empty and user has just clicked a horse card from hand, play it play it and remove it from player hand
+        if (playerPlayAreaCards[i] === null && selectedCard.name === "Horse") {
+            playerPlayAreaCards.splice(i,1,selectedCard);
+            playerHandCards.splice(playerHandCards[i],1);
+            return;
+        }
+        // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
+        if (playerPlayAreaCards[i] === null && selectedCard.name !== "Horse") {
+            alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
+        };
+    };
 });
 // below events ensure user can draw during draw phase
 horseDeck.addEventListener("click", () => {
@@ -181,8 +234,26 @@ heroDeck.addEventListener("click", () => {
     };
     drawHero();
 });
+// below functions set up start, reset, and end turn buttons
+startButton.addEventListener("click", init());
+resetButton.addEventListener("click", resetGame());
+endTurnButton.addEventListener("click", endTurn());
 
 // Invoke init function to initialize state variables
+function init() {
+    score = 0;
+    turn = turn[0];
+    currentPhase = phases[1];
+    horseDeckCards = [horse];
+    heroDeckCards = randomizeHeroDeck();
+    cpuDeckCards = randomizeCpuCards();
+    playerHandCards = playerDrawCards();
+    cpuHandCards = cpuDrawCards();
+    playerPlayAreaCards = [null, null, null];
+    cpuPlayAreaCards = [null, null, null];
+    inspectedCard = null;
+    selectedCard = null;
+};
 
 // Invoke the main render function (transfer state variables to DOM)
 
