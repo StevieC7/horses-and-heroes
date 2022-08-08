@@ -35,6 +35,7 @@ class Card {
         cardList.push(this);
     }
 }
+
 const horse = new Card("Horse",1,1,"Just a regular horse.","https://placekitten.com/200/300");
 horse.addToCardList();
 const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","https://placekitten.com/200/300");
@@ -49,13 +50,18 @@ const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","https
 stonewall.addToCardList();
 console.log(cardList);
 
-
 // Define state variables w/o values (leave that for init function)
 // -score
 // -deck arrays (consist of card objects)
 // -player hand array
 // -cpu hand array
 // -play area array (what cards are in play and where, how much health they have, any other modifiers)
+let score;
+let playerDeckCards = [];
+let cpuDeckCards = [];
+let playerHandCards = [];
+let cpuHandCards = [];
+let playAreaCards = []; // this should include array of arrays where index [0] of each inner array is the position of the card on the field and index[1] is the card object
 
 // Select HTML elements that will be used more than once
 // -play area
@@ -64,7 +70,7 @@ console.log(cardList);
 // -decks
 // -score meter
 // -game log
-
+const playArea = document.querySelector()
 // Add event listeners
 // -cards in hand
 // -play area
