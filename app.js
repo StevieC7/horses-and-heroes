@@ -95,10 +95,11 @@ const inspectCard = (card) => {
     console.log("inspectCard fired");
     inspectedCard = card;
 };
-const peekCard = (cardIndex) => {
-    console.log("peekCard fired.");
-    peekedCard = cardIndex;
-};
+// STRETCH
+// const peekCard = (cardIndex) => {
+//     console.log("peekCard fired.");
+//     peekedCard = cardIndex;
+// };
 const selectCard = (card) => {
     console.log("selectCard fired.");
     selectedCard = card;
@@ -155,15 +156,15 @@ const endTurn = () => {
 // -start button
 // -reset button
 // below event listener ensures the hand card the user is hovering over will peek out a bit
-playerHand.addEventListener("mouseover", event => {
-    console.log("playerHand mouseover fired.");
-    for (let i = 0; playerHandCards.length; i++) {
-        if (event.target !== playerHand.children[i]) {
-            return;
-        };
-        peekCard(i);
-    };
-});
+// playerHand.addEventListener("mouseover", event => {
+//     console.log("playerHand mouseover fired.");
+//     for (let i = 0; playerHandCards.length; i++) {
+//         if (event.target !== playerHand.children[i]) {
+//             return;
+//         };
+//         peekCard(i);
+//     };
+// });
 // below event listener ensures only the hand card the user is clicking on gets inspected
 // playerHand.addEventListener("click", event => {
 //     for (let i = 0; i < playerHandCards.length; i++) {
@@ -179,9 +180,11 @@ const playerHandListener = () => {
     const playerHandChildren = playerHand.children;
     for (let i = 0; i < playerHandChildren.length; i++) {
         playerHandChildren[i].addEventListener("click", () => {
-            // event.stopPropagation;
             inspectCard(playerHandCards[i]);
             selectCard(playerHandCards[i]);
+        });
+        playerHandChildren[i].addEventListener("mouseover", () => {
+            peekCard(playerHandCards[i]);
         });
     };
 };
@@ -206,28 +209,24 @@ playerPlayArea.addEventListener("mouseover", event => {
         inspectCard(playerPlayAreaCards[i]);
     };
 });
-// below event listener handles possibilities for the player's card slots
-// needs revisiting because it isn't working
-playerPlayArea.addEventListener("click", event => {
-    console.log(`playerPlayArea click fired with selected card "${selectedCard.name}".`);
-    // if not user's turn, do nothing
-    if (turn !== "Player") {
-        return;
-    };
-    // if not play phase, do nothing
-    if (currentPhase !== "Play") {
-        return;
-    };
-    // if user has not just clicked a card from hand, do nothing
-    if (selectedCard === null) {
-        return;
-    };
-    for (let i = 0; i < playerPlayAreaCards.length; i++) {
-        if (event.target !== playerPlayArea.children[i]) {
-            console.log("playerPlayArea event.target checker fired.");
+// new event listener for playerPlayArea
+const playerPlayAreaSlotElements = document.querySelectorALL(".card-slot");
+for (let i = 0; i < playerPlayAreaSlotElements.length; i++) {
+    playerPlayAreaSlotElements[i].addEventListener("click", () => {
+        console.log(`playerPlayArea click fired with selected card "${selectedCard.name}".`);
+        // if not user's turn, do nothing
+        if (turn !== "Player") {
             return;
         };
-        // if card slot is empty and user has just clicked a horse card from hand, play it play it and remove it from player hand
+        // if not play phase, do nothing
+        if (currentPhase !== "Play") {
+            return;
+        };
+        // if user has not just clicked a card from hand, do nothing
+        if (selectedCard === null) {
+            return;
+        };
+        // if card slot is empty and user has just clicked a horse card from hand, play it and remove it from player hand
         if (playerPlayAreaCards[i] === null && selectedCard.name === "Horse") {
             console.log("playerPlayArea: slot is empty and you're playing a horse.");
             playerPlayAreaCards.splice(i,1,selectedCard);
@@ -250,7 +249,11 @@ playerPlayArea.addEventListener("click", event => {
         if (playerPlayAreaCards[i] === null && selectedCard.name !== "Horse") {
             alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
         };
-    };
+    });
+};
+// below event listener handles possibilities for the player's card slots
+// needs revisiting because it isn't working
+playerPlayArea.addEventListener("click", event => {
 });
 // below events ensure user can draw during draw phase
 horseDeck.addEventListener("click", () => {
@@ -331,6 +334,10 @@ function render() {
         playerHand.append(playerHandCardElement);
     });
     playerHandListener();
+    // STRETCH
+    // update peeked card
+    // const peekedCardElement = document
+    // peekedCardElement.style.margin = "-10px 0px 10px -10px";
     // update play area
     while (playerPlayArea.lastChild) {
         playerPlayArea.removeChild(playerPlayArea.lastChild);
