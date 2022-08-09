@@ -210,48 +210,54 @@ playerPlayArea.addEventListener("mouseover", event => {
     };
 });
 // new event listener for playerPlayArea
-const playerPlayAreaSlotElements = document.querySelectorAll("#player-play-area .card-slot");
-for (let i = 0; i < playerPlayAreaSlotElements.length; i++) {
-    playerPlayAreaSlotElements[i].addEventListener("click", () => {
-        console.log(`playerPlayArea click fired with selected card "${selectedCard.name}".`);
-        // if not user's turn, do nothing
-        if (turn !== "Player") {
-            return;
-        };
-        // if not play phase, do nothing
-        if (currentPhase !== "Play") {
-            return;
-        };
-        // if user has not just clicked a card from hand, do nothing
-        if (selectedCard === null) {
-            return;
-        };
-        for (let j = 0; j < playerPlayAreaCards.length; j++) {
+const playerPlayAreaListener = () => {
+    for (let i = 0; i < playerPlayArea.children.length; i++) {
+        playerPlayArea.children[i].addEventListener("click", (e) => {
+            e.stopImmediatePropagation();
+            console.log(`playerPlayArea click fired with selected card "${selectedCard}".`);
+            // if not user's turn, do nothing
+            if (turn !== "Player") {
+                return;
+            };
+            // if not play phase, do nothing
+            if (currentPhase !== "Play") {
+                return;
+            };
+            // if user has not just clicked a card from hand, do nothing
+            if (selectedCard === null) {
+                return;
+            };
             // if card slot is empty and user has just clicked a horse card from hand, play it and remove it from player hand
-            if (playerPlayAreaCards[j] === null && selectedCard.name === "Horse") {
+            if (playerPlayAreaCards[i] === null && selectedCard.name === "Horse") {
                 console.log("playerPlayArea: slot is empty and you're playing a horse.");
-                playerPlayAreaCards.splice(j,1,selectedCard);
-                playerHandCards.splice(playerHandCards[j],1);
+                playerPlayAreaCards.splice(i,1,selectedCard);
+                playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
+                selectedCard = null;
                 return;
             };
             // if card slot is not empty and user has just clicked a horse card from hand, do nothing
-            if (playerPlayAreaCards[j] !== null && selectedCard.name === "Horse") {
+            if (playerPlayAreaCards[i] !== null && selectedCard.name === "Horse") {
                 console.log("playerPlayArea: slot not empty and you're trying to play Horse.");
+                selectedCard = null;
                 return;
             };
             // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
-            if (playerPlayAreaCards[j].name === "Horse" && selectedCard.name !== "Horse") {
+            if (playerPlayAreaCards[i].name === "Horse" && selectedCard.name !== "Horse") {
                 console.log("playerPlayArea: slot has horse and you're playing a hero.");
-                playerPlayAreaCards.splice(j,1,selectedCard);
-                playerHandCards.splice(playerHandCards[j],1);
+                playerPlayAreaCards.splice(i,1,selectedCard);
+                playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
+                selectedCard = null;
                 return;
             };
             // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
-            if (playerPlayAreaCards[j] === null && selectedCard.name !== "Horse") {
+            if (playerPlayAreaCards[i] === null && selectedCard.name !== "Horse") {
                 alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
+                selectedCard = null;
+                return;
             };
-        };
-    });
+        });
+    }
+    return;
 };
 // below events ensure user can draw during draw phase
 horseDeck.addEventListener("click", () => {
@@ -349,14 +355,15 @@ function render() {
         };
     });
     for (let i = 0; i < playerPlayAreaCardElements.length; i++) {
-        playerPlayAreaSlotElements[i].replaceWith(playerPlayAreaCardElements[i]);
+        playerPlayArea.children[i].replaceWith(playerPlayAreaCardElements[i]);
     };
     console.log(playerPlayAreaCardElements);
+    playerPlayAreaListener();
     // update cpu hand
     // update game log
     // update horse deck
     // update hero deck
-}
+};
 // setInterval(() => render(),500);
 // render();
 
