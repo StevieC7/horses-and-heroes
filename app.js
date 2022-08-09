@@ -308,10 +308,30 @@ function init() {
 function fight() {
     // TODO - write AI for cpu below
     cpuPlayAreaCards = [horse,horse,horse];
-    // TODO - write logic for fighting one space against the one opposing it on the other side. 
-    // Apply attack power of each card to the other. 
-    // If health of card <= 0, remove card. 
-    // If no opposing card, do damage to score meter.
+    // TODO - write logic for fighting one space against the one opposing it on the other side.
+    for (let i = 0; i < playerPlayArea.children.length; i++) {
+        // If no opposing card, do damage to score meter.
+        if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
+            score -= cpuPlayAreaCards[i].attack;
+            return;
+        };
+        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
+            score += playerPlayAreaCards[i].attack;
+            return;
+        };
+        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
+            // Apply attack power of each card to the other. 
+            cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
+            playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
+        };
+        // If health of card <= 0, remove card.
+        if (playerPlayAreaCards[i].health <= 0) {
+            playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,null);
+        };
+        if (cpuPlayAreaCards[i].health <= 0) {
+            cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,null);
+        };
+    }
 }
 
 // Invoke the main render function (transfer state variables to DOM)
@@ -388,7 +408,7 @@ function render() {
         fight();
         currentPhase = "Draw";
         turn = turns[0];
-    }
+    };
 };
 
     // Wait for user to trigger event (loop/timer ?)
