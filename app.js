@@ -210,7 +210,7 @@ playerPlayArea.addEventListener("mouseover", event => {
     };
 });
 // new event listener for playerPlayArea
-const playerPlayAreaSlotElements = document.querySelectorALL(".card-slot");
+const playerPlayAreaSlotElements = document.querySelectorAll(".card-slot");
 for (let i = 0; i < playerPlayAreaSlotElements.length; i++) {
     playerPlayAreaSlotElements[i].addEventListener("click", () => {
         console.log(`playerPlayArea click fired with selected card "${selectedCard.name}".`);
@@ -226,35 +226,33 @@ for (let i = 0; i < playerPlayAreaSlotElements.length; i++) {
         if (selectedCard === null) {
             return;
         };
-        // if card slot is empty and user has just clicked a horse card from hand, play it and remove it from player hand
-        if (playerPlayAreaCards[i] === null && selectedCard.name === "Horse") {
-            console.log("playerPlayArea: slot is empty and you're playing a horse.");
-            playerPlayAreaCards.splice(i,1,selectedCard);
-            playerHandCards.splice(playerHandCards[i],1);
-            return;
-        };
-        // if card slot is not empty and user has just clicked a horse card from hand, do nothing
-        if (playerPlayAreaCards[i] !== null && selectedCard.name === "Horse") {
-            console.log("playerPlayArea: slot not empty and you're trying to play Horse.");
-            return;
-        };
-        // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
-        if (playerPlayAreaCards[i].name === "Horse" && selectedCard.name !== "Horse") {
-            console.log("playerPlayArea: slot has horse and you're playing a hero.");
-            playerPlayAreaCards.splice(i,1,selectedCard);
-            playerHandCards.splice(playerHandCards[i],1);
-            return;
-        };
-        // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
-        if (playerPlayAreaCards[i] === null && selectedCard.name !== "Horse") {
-            alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
+        for (let j = 0; j < playerPlayAreaCards.length; j++) {
+            // if card slot is empty and user has just clicked a horse card from hand, play it and remove it from player hand
+            if (playerPlayAreaCards[j] === null && selectedCard.name === "Horse") {
+                console.log("playerPlayArea: slot is empty and you're playing a horse.");
+                playerPlayAreaCards.splice(j,1,selectedCard);
+                playerHandCards.splice(playerHandCards[j],1);
+                return;
+            };
+            // if card slot is not empty and user has just clicked a horse card from hand, do nothing
+            if (playerPlayAreaCards[j] !== null && selectedCard.name === "Horse") {
+                console.log("playerPlayArea: slot not empty and you're trying to play Horse.");
+                return;
+            };
+            // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
+            if (playerPlayAreaCards[j].name === "Horse" && selectedCard.name !== "Horse") {
+                console.log("playerPlayArea: slot has horse and you're playing a hero.");
+                playerPlayAreaCards.splice(j,1,selectedCard);
+                playerHandCards.splice(playerHandCards[j],1);
+                return;
+            };
+            // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
+            if (playerPlayAreaCards[j] === null && selectedCard.name !== "Horse") {
+                alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
+            };
         };
     });
 };
-// below event listener handles possibilities for the player's card slots
-// needs revisiting because it isn't working
-playerPlayArea.addEventListener("click", event => {
-});
 // below events ensure user can draw during draw phase
 horseDeck.addEventListener("click", () => {
     if (turn !== "Player") {
@@ -289,7 +287,7 @@ function init() {
     cpuDeckCards = randomizeCpuCards();
     playerHandCards = playerDrawCards();
     cpuHandCards = cpuDrawCards();
-    playerPlayAreaCards = [null, null, null];
+    playerPlayAreaCards = playerPlayAreaSlotElements;
     cpuPlayAreaCards = [null, null, null];
     inspectedCard = null;
     selectedCard = null;
