@@ -88,7 +88,7 @@ const drawHorse = () => {
 };
 const drawHero = () => {
     console.log("drawHero fired.");
-    playerHandCards.push(heroDeck[0]);
+    playerHandCards.push(heroDeckCards[0]);
     heroDeckCards.shift();
     currentPhase = phases[2];
 };
@@ -144,8 +144,12 @@ const endTurn = () => {
     console.log("End turn button fired.");
     if(turn === turns[0] && currentPhase === phases[2]) {
         currentPhase = phases[3];
-    } else if (turn === turn[0] && currentPhase === phases[1]) {
+        currentTurn = turns[1];
+        return;
+    } else if (turn === turns[0] && currentPhase === phases[1]) {
         currentPhase = phases[3];
+        currentTurn = turns[1];
+        return;
     };
 };
 
