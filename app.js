@@ -80,6 +80,7 @@ const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
 const endTurnButton = document.querySelector("#end-turn-button");
 const endGameButton = document.querySelector("#end-game-button");
+const renderButton = document.querySelector("#render-button");
 
 // Add functions called by event listeners (use arrow notation)
 //add clone function to call when needed for generating new cards in draw functions below
@@ -194,11 +195,13 @@ const endTurn = () => {
         currentPhase = phases[3];
         console.log("Current phase: " + currentPhase);
         turn = turns[1];
+        console.log("Current turn: " + turn);
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
         currentPhase = phases[3];
         console.log("Current phase: " + currentPhase);
         turn = turns[1];
+        console.log("Current turn: " + turn);
         return;
     };
 };
@@ -355,6 +358,7 @@ startButton.addEventListener("click", () => {init()});
 resetButton.addEventListener("click", () => {resetGame()});
 endTurnButton.addEventListener("click", () => {endTurn()});
 endGameButton.addEventListener("click", () => {endGame()});
+renderButton.addEventListener("click", () => {render()});
 
 // Invoke init function to initialize state variables
 function init() {
@@ -374,35 +378,40 @@ function init() {
     render();
 };
 function fight() {
-    // TODO - write logic for fighting one space against the one opposing it on the other side.
-    for (let i = 0; i < playerPlayArea.children.length; i++) {
-        // If no opposing card, do damage to score meter.
-        if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
-            console.log("Cpu doing damage. Score going from " + score);
-            score -= cpuPlayAreaCards[i].attack;
-            console.log("To " + score);
-            // return;
-        };
-        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
-            console.log("Player doing damage. Score going from " + score);
-            score += playerPlayAreaCards[i].attack;
-            console.log("To " + score);
-            // return;
-        };
-        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
-            // Apply attack power of each card to the other. 
-            console.log("Your " + playerPlayAreaCards[i].name + " is fighting " + cpuPlayAreaCards[i].name);
-            cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
-            playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
-        };
-        // If health of card <= 0, remove card.
-        if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
-            playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
-        };
-        if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].health <= 0) {
-            cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
-        };
-    };
+    cpuPlayAreaListener();
+    // for (let i = 0; i < 3; i++) {
+    //     // If no opposing card, do damage to score meter.
+    //     if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
+    //         console.log("Cpu doing damage. Score going from " + score);
+    //         score -= cpuPlayAreaCards[i].attack;
+    //         console.log("To " + score);
+    //         // return;
+    //     };
+    //     if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
+    //         console.log("Player doing damage. Score going from " + score);
+    //         score += playerPlayAreaCards[i].attack;
+    //         console.log("To " + score);
+    //         // return;
+    //     };
+    //     if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
+    //         // Apply attack power of each card to the other. 
+    //         console.log("Your " + playerPlayAreaCards[i].name + " is fighting " + cpuPlayAreaCards[i].name);
+    //         cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
+    //         playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
+    //     };
+    //     // If health of card <= 0, remove card.
+    //     if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
+    //         playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
+    //     };
+    //     if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].health <= 0) {
+    //         cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
+    //     };
+    // };
+    currentPhase = "Draw";
+    console.log("Current phase: " + currentPhase);
+    turn = turns[0];
+    console.log("Current turn set by fight during render: " + turn);
+    render();
     return;
 }
 
@@ -513,27 +522,23 @@ function render() {
     for (let i = 0; i < cpuPlayAreaCardElements.length; i++) {
         cpuPlayArea.children[i].replaceWith(cpuPlayAreaCardElements[i]);
     };
+    // cpuPlayAreaListener();
     // update game log
     // update horse deck
     // STRETCH: update hero deck graphics
     // STRETCH: update cpu hand graphics
     if (currentPhase === "Fight") {
-        cpuPlayAreaListener();
         fight();
-        currentPhase = "Draw";
-        console.log("Current phase: " + currentPhase);
-        turn = turns[0];
-        console.log("Current turn set by fight during render: " + turn);
         // render();
     };
     // update score display
-    console.log(playerPlayAreaCardElements);
+    // console.log(playerPlayAreaCardElements);
 };
-let intervalID = setInterval(() => render(),500);
-function endGame() {
-    clearInterval(intervalID);
-    intervalID = null;
-}
+// let intervalID = setInterval(() => render(),500);
+// function endGame() {
+//     clearInterval(intervalID);
+//     intervalID = null;
+// }
 
     // Wait for user to trigger event (loop/timer ?)
     
