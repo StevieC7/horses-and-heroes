@@ -82,19 +82,22 @@ const endTurnButton = document.querySelector("#end-turn-button");
 const endGameButton = document.querySelector("#end-game-button");
 
 // Add functions called by event listeners (use arrow notation)
+//add clone function to call when needed for generating new cards in draw functions below
+const cloneCards = (original) => {
+    const clonedCards = structuredClone(original);
+    return clonedCards;
+};
 const drawHorse = () => {
     // console.log("drawHorse fired.");
-    const horseClone = structuredClone(horse);
-    playerHandCards.push(horseClone);
+    playerHandCards.push(horseDeckCards[0]);
     currentPhase = phases[2];
     console.log("Current phase: " + currentPhase);
     return;
 };
 const drawHero = () => {
     // console.log("drawHero fired.");
-    let heroClone = heroDeckCards[0];
+    playerHandCards.push(heroDeckCards[0]);
     heroDeckCards.shift();
-    playerHandCards.push(heroClone);
     currentPhase = phases[2];
     console.log("Current phase: " + currentPhase);
     return;
@@ -113,31 +116,30 @@ const selectCard = (card) => {
     selectedCard = card;
 };
 const randomizeHorseDeck = () => {
-    let tempHorseDeck = [];
-    for (let i = 0; i < cardList.length; i++) {
-        tempHorseDeck.push(cardList[i]);
-    };
-    return tempHorseDeck;
+    let horseDeckClone = [];
+    horseDeckClone.push(cloneCards(horse));
+    return horseDeckClone;
 }
 const randomizeHeroDeck = () => {
     // randomize the player's hero deck and return an array of cards
     // TEST VALUE below
     // console.log("randomizeHeroDeck fired.");
-    let tempHeroDeck = [];
-    for (let i = 0; i < cardList.length; i++) {
-        tempHeroDeck.push(cardList[i]);
-    };
-    return tempHeroDeck;
+    let heroDeckClone = [];
+    cardList.forEach((val) => {
+        if (val.name !== "Horse") {
+            heroDeckClone.push(cloneCards(val));
+        };
+    });
+    console.log(heroDeckClone);
+    return heroDeckClone;
 };
 const randomizeCpuCards = () => {
     // randomize the CPU's cards and return an array of cards
     // TEST VALUE below
     // console.log("randomizeCpuCards fired.");
-    let tempCpuDeck = [];
-    for (let i = 0; i < cardList.length; i++) {
-        tempCpuDeck.push(cardList[i]);
-    }
-    return tempCpuDeck;
+    let cpuDeckClone = [];
+    cardList.forEach((val) => {cpuDeckClone.push(cloneCards(val))});
+    return cpuDeckClone;
 };
 const playerDrawCards = () => {
     // always draw one horse
@@ -145,11 +147,9 @@ const playerDrawCards = () => {
     // console.log("playerDrawCards fired.");
     // TEST VALUE below
     let tempPlayerDraw = [];
-    for (let i = 0; i < cardList.length; i++) {
-        tempPlayerDraw.push(cardList[i]);
-    }
-    tempPlayerDraw.shift();
-    tempPlayerDraw.push(horse);
+    tempPlayerDraw.push(cloneCards(horseDeckCards[0]));
+    tempPlayerDraw.push(cloneCards(heroDeckCards[0]),cloneCards(heroDeckCards[1]),cloneCards(heroDeckCards[2]));
+    heroDeckCards.splice(0,3);
     currentPhase = phases[2];
     console.log("Current phase: " + currentPhase);
     return tempPlayerDraw;
@@ -159,11 +159,9 @@ const cpuDrawCards = () => {
     // TEST VALUE below
     // console.log("cpuDrawCards fired.");
     let tempCpuDraw = [];
-    for (let i = 0; i < cardList.length; i++) {
-        tempCpuDraw.push(cardList[i]);
+    for (let i = 0; i < cpuDeckCards.length; i++) {
+        tempCpuDraw.push(cloneCards(cpuDeckCards[i]));
     }
-    tempCpuDraw.shift();
-    tempCpuDraw.push(horse);
     currentPhase = phases[2];
     console.log("Current phase: " + currentPhase);
     return tempCpuDraw;
@@ -348,17 +346,21 @@ function init() {
 };
 function fight() {
     // TODO - write AI for cpu below
-    cpuPlayAreaCards = [horse,horse,horse];
+    cpuPlayAreaCards = [cpuHandCards[0],cpuHandCards[1],cpuHandCards[2]];
     // TODO - write logic for fighting one space against the one opposing it on the other side.
     for (let i = 0; i < playerPlayArea.children.length; i++) {
         // If no opposing card, do damage to score meter.
         if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
+            console.log("Cpu doing damage. Score going from " + score);
             score -= cpuPlayAreaCards[i].attack;
-            return;
+            console.log("To " + score);
+            // return;
         };
         if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
+            console.log("Player doing damage. Score giong from " + score);
             score += playerPlayAreaCards[i].attack;
-            return;
+            console.log("To " + score);
+            // return;
         };
         if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
             // Apply attack power of each card to the other. 
@@ -366,13 +368,14 @@ function fight() {
             playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
         };
         // If health of card <= 0, remove card.
-        if (playerPlayAreaCards[i].health <= 0) {
+        if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
             playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
         };
-        if (cpuPlayAreaCards[i].health <= 0) {
+        if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].health <= 0) {
             cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
         };
-    }
+    };
+    return;
 }
 
 // Invoke the main render function (transfer state variables to DOM)
@@ -426,10 +429,10 @@ function render() {
             const playerPlayAreaCardElement = document.createElement("div");
             playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
             playerPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
-            playerPlayAreaCardElements.push(playerPlayAreaCardElement);
+            playerPlayAreaCardElements.splice(ind,0,playerPlayAreaCardElement);
         };
         if (val === "remove") {
-            playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(val),1);
+            // playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(val),1);
             // playerPlayAreaCardElements[ind] === null;
             // console.log("Removing child " + ind + " from player play area.");
             // playerPlayArea.children[ind].remove();
@@ -437,6 +440,13 @@ function render() {
             replacementChild.className = "card-slot";
             replacementChild.innerHTML = "Empty";
             playerPlayArea.children[ind].replaceWith(replacementChild);
+            playerPlayAreaCards[ind] = null;
+        };
+        if (val === null) {
+            const replacementChild = document.createElement("div");
+            replacementChild.className = "card-slot";
+            replacementChild.innerHTML = "Empty";
+            playerPlayAreaCardElements.splice(ind,0,replacementChild);
         };
     });
     for (let i = 0; i < playerPlayAreaCardElements.length; i++) {
