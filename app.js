@@ -78,6 +78,7 @@ const gameLog = document.querySelector("#game-log");
 const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
 const endTurnButton = document.querySelector("#end-turn-button");
+const endGameButton = document.querySelector("#end-game-button");
 
 // Add functions called by event listeners (use arrow notation)
 const drawHorse = () => {
@@ -282,6 +283,7 @@ heroDeck.addEventListener("click", () => {
 startButton.addEventListener("click", () => {init()});
 resetButton.addEventListener("click", () => {resetGame()});
 endTurnButton.addEventListener("click", () => {endTurn()});
+endGameButton.addEventListener("click", () => {endGame()});
 
 // Invoke init function to initialize state variables
 function init() {
@@ -364,8 +366,11 @@ function render() {
     // update horse deck
     // update hero deck
 };
-// setInterval(() => render(),500);
-// render();
+let intervalID = setInterval(() => render(),500);
+const endGame = () => {
+    clearInterval(intervalID);
+    intervalID = null;
+}
 
 // Wait for user to trigger event (loop/timer ?)
 
