@@ -58,7 +58,7 @@ let heroDeckCards;
 let cpuDeckCards = ["TEST VALUE"];
 let playerHandCards = ["TEST VALUE"];
 let cpuHandCards = ["TEST VALUE"];
-let playerPlayAreaCards = ["TEST VALUE"];
+let playerPlayAreaCards = [];
 let cpuPlayAreaCards = ["TEST VALUE"];
 let inspectedCard;
 let peekedCard;
@@ -210,7 +210,7 @@ playerPlayArea.addEventListener("mouseover", event => {
     };
 });
 // new event listener for playerPlayArea
-const playerPlayAreaSlotElements = document.querySelectorAll(".card-slot");
+const playerPlayAreaSlotElements = document.querySelectorAll("#player-play-area .card-slot");
 for (let i = 0; i < playerPlayAreaSlotElements.length; i++) {
     playerPlayAreaSlotElements[i].addEventListener("click", () => {
         console.log(`playerPlayArea click fired with selected card "${selectedCard.name}".`);
@@ -287,7 +287,7 @@ function init() {
     cpuDeckCards = randomizeCpuCards();
     playerHandCards = playerDrawCards();
     cpuHandCards = cpuDrawCards();
-    playerPlayAreaCards = playerPlayAreaSlotElements;
+    playerPlayAreaCards = [null, null, null];
     cpuPlayAreaCards = [null, null, null];
     inspectedCard = null;
     selectedCard = null;
@@ -337,15 +337,21 @@ function render() {
     // const peekedCardElement = document
     // peekedCardElement.style.margin = "-10px 0px 10px -10px";
     // update play area
-    while (playerPlayArea.lastChild) {
-        playerPlayArea.removeChild(playerPlayArea.lastChild);
-    };
+    console.log("Updating play area")
+    let playerPlayAreaCardElements = [];
     playerPlayAreaCards.forEach((val) => {
-        const playerPlayAreaCardElement = document.createElement("div");
-        playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
-        playerPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
-        playerPlayArea.append(playerPlayAreaCardElement);
+        console.log("replacing play area cards from array");
+        if (val !== null) {
+            const playerPlayAreaCardElement = document.createElement("div");
+            playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
+            playerPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+            playerPlayAreaCardElements.push(playerPlayAreaCardElement);
+        };
     });
+    for (let i = 0; i < playerPlayAreaCardElements.length; i++) {
+        playerPlayAreaSlotElements[i].replaceWith(playerPlayAreaCardElements[i]);
+    };
+    console.log(playerPlayAreaCardElements);
     // update cpu hand
     // update game log
     // update horse deck
