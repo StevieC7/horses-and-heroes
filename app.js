@@ -305,79 +305,94 @@ function init() {
     selectedCard = null;
     render();
 };
+function fight() {
+    // TODO - write AI for cpu below
+    cpuPlayAreaCards = [horse,horse,horse];
+    // TODO - write logic for fighting one space against the one opposing it on the other side. 
+    // Apply attack power of each card to the other. 
+    // If health of card <= 0, remove card. 
+    // If no opposing card, do damage to score meter.
+}
 
 // Invoke the main render function (transfer state variables to DOM)
 function render() {
-    console.log("render fired");
-    // update start, reset, and end turn buttons based on current phase
-    if (currentPhase !== phases[0]) {
-        startButton.style.display = "none";
-    } else if (currentPhase === phases[0]) {
-        startButton.style.display = "inline-block";
-        resetButton.style.display = "none";
-        endTurnButton.style.display = "none";
-    };
-    if (currentPhase === phases[2] || currentPhase === phases[1]) {
-        endTurnButton.style.display = "inline-block";
-    };
-    // update score meter with results from fight phase
-    // update card inspection to display currently inspected card
-    while (cardInspection.lastChild) {
-        console.log("Removing last inspected card");
-        cardInspection.removeChild(cardInspection.lastChild);
-    };
-    if (inspectedCard !== null && inspectedCard !== undefined) {
-        console.log("Inspected card element populated");
-        const inspectedCardElement = document.createElement("div");
-        inspectedCardElement.classList.add("inspected-card");
-        inspectedCardElement.innerHTML = `<img src=\"${inspectedCard.art}\"><p>${inspectedCard.description}</p><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div>`
-        cardInspection.append(inspectedCardElement);
-    }
-    // update player hand
-    while (playerHand.lastChild) {
-        playerHand.removeChild(playerHand.lastChild);
-    };
-    playerHandCards.forEach((val) => {
-        const playerHandCardElement = document.createElement("div");
-        playerHandCardElement.classList.add("player-hand-card");
-        playerHandCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
-        playerHand.append(playerHandCardElement);
-    });
-    playerHandListener();
-    // STRETCH
-    // update peeked card
-    // const peekedCardElement = document
-    // peekedCardElement.style.margin = "-10px 0px 10px -10px";
-    // update play area
-    console.log("Updating play area")
-    let playerPlayAreaCardElements = [];
-    playerPlayAreaCards.forEach((val) => {
-        console.log("replacing play area cards from array");
-        if (val !== null) {
-            const playerPlayAreaCardElement = document.createElement("div");
-            playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
-            playerPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
-            playerPlayAreaCardElements.push(playerPlayAreaCardElement);
+    while (currentPhase !== "Fight") {
+        console.log("render fired");
+        // update start, reset, and end turn buttons based on current phase
+        if (currentPhase !== phases[0]) {
+            startButton.style.display = "none";
+        } else if (currentPhase === phases[0]) {
+            startButton.style.display = "inline-block";
+            resetButton.style.display = "none";
+            endTurnButton.style.display = "none";
         };
-    });
-    for (let i = 0; i < playerPlayAreaCardElements.length; i++) {
-        playerPlayArea.children[i].replaceWith(playerPlayAreaCardElements[i]);
+        if (currentPhase === phases[2] || currentPhase === phases[1]) {
+            endTurnButton.style.display = "inline-block";
+        };
+        // update score meter with results from fight phase
+        // update card inspection to display currently inspected card
+        while (cardInspection.lastChild) {
+            console.log("Removing last inspected card");
+            cardInspection.removeChild(cardInspection.lastChild);
+        };
+        if (inspectedCard !== null && inspectedCard !== undefined) {
+            console.log("Inspected card element populated");
+            const inspectedCardElement = document.createElement("div");
+            inspectedCardElement.classList.add("inspected-card");
+            inspectedCardElement.innerHTML = `<img src=\"${inspectedCard.art}\"><p>${inspectedCard.description}</p><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div>`
+            cardInspection.append(inspectedCardElement);
+        }
+        // update player hand
+        while (playerHand.lastChild) {
+            playerHand.removeChild(playerHand.lastChild);
+        };
+        playerHandCards.forEach((val) => {
+            const playerHandCardElement = document.createElement("div");
+            playerHandCardElement.classList.add("player-hand-card");
+            playerHandCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+            playerHand.append(playerHandCardElement);
+        });
+        playerHandListener();
+        // STRETCH
+        // update peeked card
+        // const peekedCardElement = document
+        // peekedCardElement.style.margin = "-10px 0px 10px -10px";
+        // update play area
+        console.log("Updating play area")
+        let playerPlayAreaCardElements = [];
+        playerPlayAreaCards.forEach((val) => {
+            console.log("replacing play area cards from array");
+            if (val !== null) {
+                const playerPlayAreaCardElement = document.createElement("div");
+                playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
+                playerPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+                playerPlayAreaCardElements.push(playerPlayAreaCardElement);
+            };
+        });
+        for (let i = 0; i < playerPlayAreaCardElements.length; i++) {
+            playerPlayArea.children[i].replaceWith(playerPlayAreaCardElements[i]);
+        };
+        console.log(playerPlayAreaCardElements);
+        playerPlayAreaListener();
+        // update cpu hand
+        // update game log
+        // update horse deck
+        // update hero deck
+        let intervalID = setInterval(() => render(),500);
+        const endGame = () => {
+            clearInterval(intervalID);
+            intervalID = null;
+        };
     };
-    console.log(playerPlayAreaCardElements);
-    playerPlayAreaListener();
-    // update cpu hand
-    // update game log
-    // update horse deck
-    // update hero deck
+    while (currentPhase === "Fight") {
+        fight();
+        currentPhase = "Draw";
+        turn = turns[0];
+    }
 };
-let intervalID = setInterval(() => render(),500);
-const endGame = () => {
-    clearInterval(intervalID);
-    intervalID = null;
-}
 
-// Wait for user to trigger event (loop/timer ?)
-
-// Update states based on user action
+    // Wait for user to trigger event (loop/timer ?)
+    
+    // Update states based on user action
 
 // Invoke render function again
