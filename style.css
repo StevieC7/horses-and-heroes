@@ -86,3 +86,6 @@ h1 {
     width: 100%;
     height: auto;
 }
+.game-log-display {
+    display:block;
+}

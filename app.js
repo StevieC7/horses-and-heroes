@@ -62,6 +62,7 @@ let cpuPlayAreaCards = [];
 let inspectedCard;
 let peekedCard;
 let selectedCard;
+let gameLogQueue = [null];
 
 // Select HTML elements that will be used more than once
 const playArea = document.querySelector("#play-area");
@@ -88,14 +89,18 @@ const cloneCards = (original) => {
 };
 const drawHorse = () => {
     playerHandCards.push(horseDeckCards[0]);
+    logEvent(`You drew ${playerHandCards[playerHandCards.length - 1].name}`);
     currentPhase = phases[2];
+    logEvent(`Now it's time to ${currentPhase}`);
     return;
 };
 const drawHero = () => {
     if (heroDeckCards.length >= 1) {
         playerHandCards.push(heroDeckCards[0]);
+        logEvent(`You drew ${playerHandCards[playerHandCards.length - 1].name}`);
         heroDeckCards.shift();
         currentPhase = phases[2];
+        logEvent(`Now it's time to ${currentPhase}`);
         return;
     } else {
         alert("You don't have any hero cards to draw.");
@@ -143,6 +148,7 @@ const playerDrawCards = () => {
     tempPlayerDraw.push(cloneCards(heroDeckCards[0]),cloneCards(heroDeckCards[1]),cloneCards(heroDeckCards[2]));
     heroDeckCards.splice(0,3);
     currentPhase = phases[2];
+    logEvent(`Now it's time to ${currentPhase}`);
     return tempPlayerDraw;
 };
 const cpuFirstDrawCards = () => {
@@ -153,6 +159,7 @@ const cpuFirstDrawCards = () => {
         tempCpuDraw.push(cpuDeckCards[i]);
     }
     currentPhase = phases[2];
+    logEvent(`Now it's time to ${currentPhase}`);
     return tempCpuDraw;
 };
 const cpuDrawCards = () => {
@@ -180,11 +187,15 @@ const resetGame = () => {
 const endTurn = () => {
     if(turn === turns[0] && currentPhase === phases[2]) {
         currentPhase = phases[3];
+        logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
+        logEvent(`Turn: ${turn}`);
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
         currentPhase = phases[3];
+        logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
+        logEvent(`Turn: ${turn}`);
         return;
     };
 };
@@ -352,32 +363,45 @@ function init() {
     // cpuPlayAreaListener();
     render();
 };
+const logEvent = (message) => {
+    const gameLogDisplay = document.createElement("p");
+    gameLogDisplay.classList = "game-log-display";
+    gameLogDisplay.innerHTML = message;
+    gameLogQueue.push(gameLogDisplay);
+    return;
+}
 function fight() {
-    for (let i = 0; i < 3; i++) {
-        // If no opposing card, do damage to score meter.
-        if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
-            score -= cpuPlayAreaCards[i].attack;
-            // return;
+    if (currentPhase !== "Fight") {
+        return;
+    }
+        console.log("Fight function begin");
+        for (let i = 0; i < 3; i++) {
+            // If no opposing card, do damage to score meter.
+            if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
+                score -= cpuPlayAreaCards[i].attack;
+                // return;
+            };
+            if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
+                score += playerPlayAreaCards[i].attack;
+                // return;
+            };
+            if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
+                // Apply attack power of each card to the other. 
+                cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
+                playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
+            };
+            // If health of card <= 0, remove card.
+            if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
+                playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
+            };
+            if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].health <= 0) {
+                cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
+            };
         };
-        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
-            score += playerPlayAreaCards[i].attack;
-            // return;
-        };
-        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
-            // Apply attack power of each card to the other. 
-            cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
-            playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
-        };
-        // If health of card <= 0, remove card.
-        if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
-            playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
-        };
-        if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].health <= 0) {
-            cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
-        };
-    };
     currentPhase = "Draw";
+    logEvent(`Now it's time to ${currentPhase}`);
     turn = turns[0];
+    logEvent(`Turn: ${turn}`);
     // let postFightRenderDelay = setTimeout(() => render(),5000);
     // function stopTimer() {
     //     clearTimeout(postFightRenderDelay);
@@ -385,6 +409,7 @@ function fight() {
     // }
     // stopTimer();
     render();
+    console.log("Fight function end");
     return;
 };
 
@@ -401,8 +426,6 @@ function render() {
     if (currentPhase === phases[2] || currentPhase === phases[1]) {
         endTurnButton.style.display = "inline-block";
     };
-    // update score meter with results from fight phase
-    // update card inspection to display currently inspected card
     while (cardInspection.lastChild) {
         cardInspection.removeChild(cardInspection.lastChild);
     };
@@ -412,7 +435,6 @@ function render() {
         inspectedCardElement.innerHTML = `<img src=\"${inspectedCard.art}\"><p>${inspectedCard.description}</p><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div>`
         cardInspection.append(inspectedCardElement);
     };
-    // update player hand
     while (playerHand.lastChild) {
         playerHand.removeChild(playerHand.lastChild);
     };
@@ -427,7 +449,6 @@ function render() {
     // update peeked card
     // const peekedCardElement = document
     // peekedCardElement.style.margin = "-10px 0px 10px -10px";
-    // update player play area
     let playerPlayAreaCardElements = [];
     playerPlayAreaCards.forEach((val,ind) => {
         if (val !== null && val !== "remove") {
@@ -437,9 +458,6 @@ function render() {
             playerPlayAreaCardElements.splice(ind,0,playerPlayAreaCardElement);
         };
         if (val === "remove") {
-            // playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(val),1);
-            // playerPlayAreaCardElements[ind] === null;
-            // playerPlayArea.children[ind].remove();
             const replacementChild = document.createElement("div");
             replacementChild.className = "card-slot";
             replacementChild.innerHTML = "Empty";
@@ -457,8 +475,6 @@ function render() {
         playerPlayArea.children[i].replaceWith(playerPlayAreaCardElements[i]);
     };
     playerPlayAreaListener();
-    // cpuPlayAreaListener();
-    // update cpu play area
     let cpuPlayAreaCardElements = [];
     cpuPlayAreaCards.forEach((val,ind) => {
         if (val !== null && val !== "remove") {
@@ -468,9 +484,6 @@ function render() {
             cpuPlayAreaCardElements.splice(ind,0,cpuPlayAreaCardElement);
         };
         if (val === "remove") {
-            // cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(val),1);
-            // cpuPlayAreaCardElements[ind] === null;
-            // cpuPlayArea.children[ind].remove();
             const replacementChild = document.createElement("div");
             replacementChild.className = "card-slot";
             replacementChild.innerHTML = "Empty";
@@ -493,7 +506,9 @@ function render() {
     // STRETCH: update cpu hand graphics
     if (currentPhase === "Fight") {
         cpuPlayAreaListener();
-        setTimeout(() => {fight();},5000);
+        const fightDelay = (ms) => new Promise(resolve => setTimeout(resolve,ms));
+        // fight delay is taking an argument for how many milliseconds to wait before returning a resolve to the promise and allowing the "then" function to execute
+        fightDelay(2000).then(() => fight());
         // fight();
         // render();
     };
@@ -505,13 +520,18 @@ function render() {
     scoreMeterDisplay.className = "score-meter";
     scoreMeterDisplay.innerHTML = `${score}`;
     scoreMeter.append(scoreMeterDisplay);
+    for (let i = 0; i < gameLogQueue.length; i++) {
+        if (gameLogQueue[i] !== null) {
+            gameLog.append(gameLogQueue[i]);
+        };
+        gameLogQueue[i].splice(i,1);
+    };
 };
-let renderCycle = setInterval(() => render(),500);
+let renderCycle = setInterval(() => requestAnimationFrame(render),1000);
 function endGame() {
     clearInterval(renderCycle);
     renderCycle = null;
 }
-
     // Wait for user to trigger event (loop/timer ?)
     
     // Update states based on user action
