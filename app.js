@@ -159,7 +159,6 @@ const cpuFirstDrawCards = () => {
         tempCpuDraw.push(cpuDeckCards[i]);
     }
     currentPhase = phases[2];
-    // logEvent(`Now it's time to ${currentPhase}`);
     return tempCpuDraw;
 };
 const cpuDrawCards = () => {
