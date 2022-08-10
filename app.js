@@ -186,12 +186,14 @@ const endTurn = () => {
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
+        cpuPlayAreaListener();
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
         currentPhase = phases[3];
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
+        cpuPlayAreaListener();
         return;
     };
 };
@@ -245,6 +247,7 @@ cpuPlayArea.addEventListener("mouseover", event => {
 });
 // below is callback function for updating the cpu play area model during render cycle
 const cpuPlayAreaListener = () => {
+    console.log("cpuPlayAreaListener is running");
     // for (let i = 0; i < 3; i++) {
         if (turn !== turns[1]) {
             return;
@@ -510,12 +513,9 @@ function render() {
     // STRETCH: update hero deck graphics
     // STRETCH: update cpu hand graphics
     if (currentPhase === "Fight") {
-        cpuPlayAreaListener();
+        // cpuPlayAreaListener();
         const fightDelay = (ms) => new Promise(resolve => setTimeout(resolve,ms));
-        // fight delay is taking an argument for how many milliseconds to wait before returning a resolve to the promise and allowing the "then" function to execute
         fightDelay(3000).then(() => fight());
-        // fight();
-        // render();
     };
     // update score display
     while (scoreMeter.children.length > 1) {
