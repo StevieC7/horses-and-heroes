@@ -257,18 +257,48 @@ const cpuPlayAreaListener = () => {
         }
         cpuDrawCards();
         // TODO - write new AI for cpu below
-        // first loop over hand to see if there are horses
-        // then if there are horses, check to see if there are open slots
-        // if there are open slots, play horses until you are out of horses
-        // next, loop over hand to see if there are any cards left
-        // if there are cards left, pick the one with lowest total power (easy AI)
+        //      first loop over hand to see if there are horses and where they are
+        let cpuHandHorses = [];
+        for (let i = 0; i < cpuHandCards.length; i++) {
+            if (cpuHandCards[i].name === "Horse") {
+                cpuHandHorses.push(i);
+            };
+        };
+        console.log(cpuHandHorses);
+        //      then if there are horses, check to see if there are open slots and where they are
+        let openSlots = [];
+        if (cpuHandHorses.length >= 1) {
+            for (let i = 0; i < cpuPlayAreaCards.length;i++) {
+                if (cpuPlayAreaCards[i] === null) {
+                    openSlots.push(i);
+                };
+            };
+        };
+        console.log(openSlots);
+        //      if there are open slots and horses, play horses until you are out of horses
+        let horsePlayIterator = 0;
+        while (openSlots.length > 0 && cpuHandHorses.length > 0) {
+            console.log("horseplay while loop running");
+            cpuPlayAreaCards.splice(openSlots[horsePlayIterator],1,cpuHandCards[cpuHandHorses[horsePlayIterator]]);
+            cpuHandHorses.shift();
+            cpuHandCards.splice(cpuHandHorses[horsePlayIterator],1);
+            horsePlayIterator++;
+        };
+        //      next, loop over hand to see if there are any cards left
+        let cpuHandHeroes = [];
+        for (let i = 0; i < cpuHandCards.length; i++) {
+            cpuHandHeroes.push(i);
+        };
+        //      if there are cards left, pick the one with lowest total power (easy AI)
+        //      loop over spots to see if there are any with horses
+        //      if horse in spot, play card
 
         // TODO - remove this Original "AI" for MVP once the new AI is written
-        if (cpuHandCards.length >= 1) {
-            cpuPlayAreaCards.splice(0,1,cpuHandCards[0]);
-            console.log("CPU playing card: " + cpuPlayAreaCards[0]);
-            cpuHandCards.splice(0,1);
-        };
+        // if (cpuHandCards.length >= 1) {
+        //     cpuPlayAreaCards.splice(0,1,cpuHandCards[0]);
+        //     console.log("CPU playing card: " + cpuPlayAreaCards[0]);
+        //     cpuHandCards.splice(0,1);
+        // };
     // }
 };
 // below event listener ensures the card the user hovers over on the player's board gets inspected
