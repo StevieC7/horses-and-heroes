@@ -45,7 +45,6 @@ const sirstabsalot = new Card("Sir Stabsalot",5,2,"The third spear is a bit exce
 sirstabsalot.addToCardList();
 const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","https://placekitten.com/200/300");
 stonewall.addToCardList();
-// console.log(cardList);
 
 // Define state variables w/o values (leave that for init function)
 let score;
@@ -53,7 +52,6 @@ const turns = ["Player","CPU"];
 let turn;
 const phases = ["Setup","Draw","Play","Fight"];
 let currentPhase = phases[0];
-// console.log("Current phase: " + currentPhase);
 let horseDeckCards;
 let heroDeckCards;
 let cpuDeckCards = [];
@@ -89,35 +87,28 @@ const cloneCards = (original) => {
     return clonedCards;
 };
 const drawHorse = () => {
-    // console.log("drawHorse fired.");
     playerHandCards.push(horseDeckCards[0]);
     currentPhase = phases[2];
-    // console.log("Current phase: " + currentPhase);
     return;
 };
 const drawHero = () => {
-    // console.log("drawHero fired.");
     if (heroDeckCards.length >= 1) {
         playerHandCards.push(heroDeckCards[0]);
         heroDeckCards.shift();
         currentPhase = phases[2];
-        // console.log("Current phase: " + currentPhase);
         return;
     } else {
         alert("You don't have any hero cards to draw.");
     };
 };
 const inspectCard = (card) => {
-    // console.log("inspectCard fired");
     inspectedCard = card;
 };
 // STRETCH
 // const peekCard = (cardIndex) => {
-//     console.log("peekCard fired.");
 //     peekedCard = cardIndex;
 // };
 const selectCard = (card) => {
-    // console.log("selectCard fired.");
     selectedCard = card;
 };
 const randomizeHorseDeck = () => {
@@ -128,20 +119,17 @@ const randomizeHorseDeck = () => {
 const randomizeHeroDeck = () => {
     // randomize the player's hero deck and return an array of cards
     // TEST VALUE below
-    // console.log("randomizeHeroDeck fired.");
     let heroDeckClone = [];
     cardList.forEach((val) => {
         if (val.name !== "Horse") {
             heroDeckClone.push(cloneCards(val));
         };
     });
-    // console.log(heroDeckClone);
     return heroDeckClone;
 };
 const randomizeCpuCards = () => {
     // randomize the CPU's cards and return an array of cards
     // TEST VALUE below
-    // console.log("randomizeCpuCards fired.");
     let cpuDeckClone = [];
     cardList.forEach((val) => {cpuDeckClone.push(cloneCards(val))});
     return cpuDeckClone;
@@ -149,45 +137,35 @@ const randomizeCpuCards = () => {
 const playerDrawCards = () => {
     // always draw one horse
     // randomly draw either horses or heroes for the rest of the cards
-    // console.log("playerDrawCards fired.");
     // TEST VALUE below
     let tempPlayerDraw = [];
     tempPlayerDraw.push(cloneCards(horseDeckCards[0]));
     tempPlayerDraw.push(cloneCards(heroDeckCards[0]),cloneCards(heroDeckCards[1]),cloneCards(heroDeckCards[2]));
     heroDeckCards.splice(0,3);
     currentPhase = phases[2];
-    // console.log("Current phase: " + currentPhase);
     return tempPlayerDraw;
 };
 const cpuFirstDrawCards = () => {
     // treat cpu the same way as player draw
     // TEST VALUE below
-    // console.log("cpuFirstDrawCards fired.");
     let tempCpuDraw = [];
     for (let i = 0; i < cpuDeckCards.length; i++) {
         tempCpuDraw.push(cpuDeckCards[i]);
     }
     currentPhase = phases[2];
-    // console.log("Current phase: " + currentPhase);
     return tempCpuDraw;
 };
 const cpuDrawCards = () => {
     // write function to have cpu draw from its own cloned decks like a human player would
     let cpuHorseDeck = [];
     cpuHorseDeck.push(cloneCards(horse));
-    console.log("CPU horse deck on line below");
-    cpuHorseDeck.forEach((val) => console.log(val));
     let cpuHeroDeck = [];
     cpuHeroDeck.push(cloneCards(heroDeckCards[0]));
-    console.log("CPU hero deck: " + cpuHeroDeck);
     let picker = Math.random();
     if (picker < 0.5) {
         cpuHandCards.push(cpuHorseDeck[0]);
-        console.log(cpuHandCards[cpuHandCards.length - 1].name + " added");
     } else if (picker >= 0.5 && cpuHeroDeck.length >= 1){
         cpuHandCards.push(cpuHeroDeck[0]);
-        console.log(cpuHeroDeck[0].name + "was the first card in the CPU hero deck");
-        console.log(cpuHandCards[cpuHandCards.length - 1].name + " added");
         cpuHeroDeck.shift();
     };
 };
@@ -200,18 +178,13 @@ const resetGame = () => {
     };
 };
 const endTurn = () => {
-    // console.log("End turn button fired.");
     if(turn === turns[0] && currentPhase === phases[2]) {
         currentPhase = phases[3];
-        // console.log("Current phase: " + currentPhase);
         turn = turns[1];
-        // console.log("Current turn: " + turn);
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
         currentPhase = phases[3];
-        // console.log("Current phase: " + currentPhase);
         turn = turns[1];
-        // console.log("Current turn: " + turn);
         return;
     };
 };
@@ -225,7 +198,6 @@ const endTurn = () => {
 // -reset button
 // below event listener ensures the hand card the user is hovering over will peek out a bit
 // playerHand.addEventListener("mouseover", event => {
-//     console.log("playerHand mouseover fired.");
 //     for (let i = 0; playerHandCards.length; i++) {
 //         if (event.target !== playerHand.children[i]) {
 //             return;
@@ -244,7 +216,6 @@ const endTurn = () => {
 //     };
 // });
 const playerHandListener = () => {
-    // console.log("playerHandListener click fired");
     const playerHandChildren = playerHand.children;
     for (let i = 0; i < playerHandChildren.length; i++) {
         playerHandChildren[i].addEventListener("click", () => {
@@ -258,7 +229,6 @@ const playerHandListener = () => {
 };
 // below event listener ensures the card the user hovers over gets inspected
 cpuPlayArea.addEventListener("mouseover", event => {
-    // console.log("cpuPlayArea mouseover fired.");
     for (let i = 0; i < cpuPlayArea.children.length; i++) {
         if (event.target !== cpuPlayArea.children[i]) {
             return;
@@ -276,11 +246,9 @@ const cpuPlayAreaListener = () => {
             return;
         }
         // TODO - write AI for cpu below
-        console.log("CPU play area cards before drawing: " + cpuPlayAreaCards);
         cpuDrawCards();
         if (cpuHandCards.length >= 1) {
             cpuPlayAreaCards.splice(0,1,cpuHandCards[0]);
-            console.log("CPU play area cards after drawing and playing from hand: " + cpuPlayAreaCards[0].name);
             cpuHandCards.splice(0,1);
         };
     // }
@@ -288,7 +256,6 @@ const cpuPlayAreaListener = () => {
 // TODO: refactor playerPlayArea event listeners to apply them individually to the three possible child divs with class "card-slot"
 // below event listener ensures the card the user hovers over on the player's board gets inspected
 playerPlayArea.addEventListener("mouseover", event => {
-    // console.log("playerPlayArea mouseover fired.");
     for (let i = 0; i < playerPlayArea.children.length; i++) {
         if (event.target !== playerPlayArea.children[i]) {
             return;
@@ -301,9 +268,6 @@ const playerPlayAreaListener = () => {
     for (let i = 0; i < playerPlayArea.children.length; i++) {
         playerPlayArea.children[i].addEventListener("click", (e) => {
             e.stopImmediatePropagation();
-            if (selectedCard !== null) {
-                // console.log(`playerPlayArea click fired with selected card "${selectedCard.name}".`);
-            }
             // if not user's turn, do nothing
             if (turn !== "Player") {
                 return;
@@ -318,7 +282,6 @@ const playerPlayAreaListener = () => {
             };
             // if card slot is empty and user has just clicked a horse card from hand, play it and remove it from player hand
             if (playerPlayAreaCards[i] === null && selectedCard.name === "Horse") {
-                // console.log("playerPlayArea: slot is empty and you're playing a horse.");
                 playerPlayAreaCards.splice(i,1,selectedCard);
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
@@ -326,13 +289,11 @@ const playerPlayAreaListener = () => {
             };
             // if card slot is not empty and user has just clicked a horse card from hand, do nothing
             if (playerPlayAreaCards[i] !== null && selectedCard.name === "Horse") {
-                // console.log("playerPlayArea: slot not empty and you're trying to play Horse.");
                 selectedCard = null;
                 return;
             };
             // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
             if (playerPlayAreaCards[i].name === "Horse" && selectedCard.name !== "Horse") {
-                // console.log("playerPlayArea: slot has horse and you're playing a hero.");
                 playerPlayAreaCards.splice(i,1,selectedCard);
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
@@ -379,7 +340,6 @@ function init() {
     score = 0;
     turn = turns[0];
     currentPhase = phases[1];
-    // console.log("Current phase: " + currentPhase);
     horseDeckCards = randomizeHorseDeck();
     heroDeckCards = randomizeHeroDeck();
     cpuDeckCards = randomizeCpuCards();
@@ -396,20 +356,15 @@ function fight() {
     for (let i = 0; i < 3; i++) {
         // If no opposing card, do damage to score meter.
         if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
-            console.log("Cpu doing damage. Score going from " + score);
             score -= cpuPlayAreaCards[i].attack;
-            console.log("To " + score);
             // return;
         };
         if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
-            console.log("Player doing damage. Score going from " + score);
             score += playerPlayAreaCards[i].attack;
-            console.log("To " + score);
             // return;
         };
         if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
             // Apply attack power of each card to the other. 
-            console.log("Your " + playerPlayAreaCards[i].name + " is fighting " + cpuPlayAreaCards[i].name);
             cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
             playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
         };
@@ -422,9 +377,7 @@ function fight() {
         };
     };
     currentPhase = "Draw";
-    // console.log("Current phase: " + currentPhase);
     turn = turns[0];
-    // console.log("Current turn set by fight during render: " + turn);
     // let postFightRenderDelay = setTimeout(() => render(),5000);
     // function stopTimer() {
     //     clearTimeout(postFightRenderDelay);
@@ -437,7 +390,6 @@ function fight() {
 
 // Invoke the main render function (transfer state variables to DOM)
 function render() {
-    // console.log("render fired");
     // update start, reset, and end turn buttons based on current phase
     if (currentPhase !== phases[0]) {
         startButton.style.display = "none";
@@ -452,11 +404,9 @@ function render() {
     // update score meter with results from fight phase
     // update card inspection to display currently inspected card
     while (cardInspection.lastChild) {
-        // console.log("Removing last inspected card");
         cardInspection.removeChild(cardInspection.lastChild);
     };
     if (inspectedCard !== null && inspectedCard !== undefined) {
-        // console.log("Inspected card element populated");
         const inspectedCardElement = document.createElement("div");
         inspectedCardElement.classList.add("inspected-card");
         inspectedCardElement.innerHTML = `<img src=\"${inspectedCard.art}\"><p>${inspectedCard.description}</p><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div>`
@@ -478,10 +428,8 @@ function render() {
     // const peekedCardElement = document
     // peekedCardElement.style.margin = "-10px 0px 10px -10px";
     // update player play area
-    // console.log("Updating play area");
     let playerPlayAreaCardElements = [];
     playerPlayAreaCards.forEach((val,ind) => {
-        // console.log("replacing play area cards from array");
         if (val !== null && val !== "remove") {
             const playerPlayAreaCardElement = document.createElement("div");
             playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
@@ -491,7 +439,6 @@ function render() {
         if (val === "remove") {
             // playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(val),1);
             // playerPlayAreaCardElements[ind] === null;
-            // console.log("Removing child " + ind + " from player play area.");
             // playerPlayArea.children[ind].remove();
             const replacementChild = document.createElement("div");
             replacementChild.className = "card-slot";
@@ -509,25 +456,20 @@ function render() {
     for (let i = 0; i < playerPlayAreaCardElements.length; i++) {
         playerPlayArea.children[i].replaceWith(playerPlayAreaCardElements[i]);
     };
-    // console.log(playerPlayAreaCardElements);
     playerPlayAreaListener();
     // cpuPlayAreaListener();
     // update cpu play area
     let cpuPlayAreaCardElements = [];
     cpuPlayAreaCards.forEach((val,ind) => {
-        console.log("cpu play area render cycle begin (foreach)");
         if (val !== null && val !== "remove") {
-            console.log("cpu play area render: val " + val.name + " at index " + ind + " !== null and !== remove")
             const cpuPlayAreaCardElement = document.createElement("div");
             cpuPlayAreaCardElement.classList.add("card-slot","filled-slot");
             cpuPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
             cpuPlayAreaCardElements.splice(ind,0,cpuPlayAreaCardElement);
         };
         if (val === "remove") {
-            console.log("cpu play area render: val " + val.name + " at index " + ind + " === remove")
             // cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(val),1);
             // cpuPlayAreaCardElements[ind] === null;
-            // console.log("Removing child " + ind + " from cpu play area.");
             // cpuPlayArea.children[ind].remove();
             const replacementChild = document.createElement("div");
             replacementChild.className = "card-slot";
@@ -536,7 +478,6 @@ function render() {
             cpuPlayAreaCards[ind] = null;
         };
         if (val === null) {
-            console.log("cpu play area render: val " + val + " at index " + ind + " === null")
             const replacementChild = document.createElement("div");
             replacementChild.className = "card-slot";
             replacementChild.innerHTML = "Empty";
@@ -552,7 +493,7 @@ function render() {
     // STRETCH: update cpu hand graphics
     if (currentPhase === "Fight") {
         cpuPlayAreaListener();
-        let preFightRenderDelay = setTimeout(() => fight(),5000);
+        setTimeout(() => {fight();},5000);
         // fight();
         // render();
     };
@@ -564,12 +505,11 @@ function render() {
     scoreMeterDisplay.className = "score-meter";
     scoreMeterDisplay.innerHTML = `${score}`;
     scoreMeter.append(scoreMeterDisplay);
-    // console.log(playerPlayAreaCardElements);
 };
-let intervalID = setInterval(() => render(),500);
+let renderCycle = setInterval(() => render(),500);
 function endGame() {
-    clearInterval(intervalID);
-    intervalID = null;
+    clearInterval(renderCycle);
+    renderCycle = null;
 }
 
     // Wait for user to trigger event (loop/timer ?)
