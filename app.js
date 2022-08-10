@@ -79,7 +79,7 @@ const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
 const endTurnButton = document.querySelector("#end-turn-button");
 const endGameButton = document.querySelector("#end-game-button");
-const renderButton = document.querySelector("#render-button");
+// const renderButton = document.querySelector("#render-button");
 
 // Add functions called by event listeners (use arrow notation)
 //add clone function to call when needed for generating new cards in draw functions below
@@ -343,7 +343,7 @@ startButton.addEventListener("click", () => {init()});
 resetButton.addEventListener("click", () => {resetGame()});
 endTurnButton.addEventListener("click", () => {endTurn()});
 endGameButton.addEventListener("click", () => {endGame()});
-renderButton.addEventListener("click", () => {render()});
+// renderButton.addEventListener("click", () => {render()});
 
 // Invoke init function to initialize state variables
 function init() {
@@ -508,24 +508,26 @@ function render() {
         cpuPlayAreaListener();
         const fightDelay = (ms) => new Promise(resolve => setTimeout(resolve,ms));
         // fight delay is taking an argument for how many milliseconds to wait before returning a resolve to the promise and allowing the "then" function to execute
-        fightDelay(2000).then(() => fight());
+        fightDelay(3000).then(() => fight());
         // fight();
         // render();
     };
     // update score display
-    while (scoreMeter.lastChild) {
+    while (scoreMeter.children.length > 1) {
         scoreMeter.removeChild(scoreMeter.lastChild);
-    }
+    };
     const scoreMeterDisplay = document.createElement("div");
     scoreMeterDisplay.className = "score-meter";
     scoreMeterDisplay.innerHTML = `${score}`;
-    scoreMeter.append(scoreMeterDisplay);
+    scoreMeter.appendChild(scoreMeterDisplay);
     for (let i = 0; i < gameLogQueue.length; i++) {
         if (gameLogQueue[i] !== null) {
             gameLog.append(gameLogQueue[i]);
         };
         gameLogQueue.splice(i,1);
     };
+    gameLog.scrollTo(0, gameLog.scrollHeight);
+    console.log("Game Log Scrolled");
 };
 let renderCycle = setInterval(() => requestAnimationFrame(render),1000);
 function endGame() {
