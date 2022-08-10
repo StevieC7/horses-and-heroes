@@ -177,11 +177,8 @@ const cpuDrawCards = () => {
 };
 const resetGame = () => {
     // check if user is sure
-    prompt("Are you sure? Y/N");
     // if confirmation received, reset the game
-    if (prompt.value === "Y") {
-        init();
-    };
+    location.reload();
 };
 const endTurn = () => {
     if(turn === turns[0] && currentPhase === phases[2]) {
@@ -255,15 +252,16 @@ const cpuPlayAreaListener = () => {
         if (currentPhase !== "Fight") {
             return;
         }
-        // TODO - write AI for cpu below
         cpuDrawCards();
+        // TODO - write new AI for cpu below
+
+        // TODO - remove this Original "AI" for MVP below
         if (cpuHandCards.length >= 1) {
             cpuPlayAreaCards.splice(0,1,cpuHandCards[0]);
             cpuHandCards.splice(0,1);
         };
     // }
 };
-// TODO: refactor playerPlayArea event listeners to apply them individually to the three possible child divs with class "card-slot"
 // below event listener ensures the card the user hovers over on the player's board gets inspected
 playerPlayArea.addEventListener("mouseover", event => {
     for (let i = 0; i < playerPlayArea.children.length; i++) {
@@ -432,7 +430,8 @@ function render() {
     if (inspectedCard !== null && inspectedCard !== undefined) {
         const inspectedCardElement = document.createElement("div");
         inspectedCardElement.classList.add("inspected-card");
-        inspectedCardElement.innerHTML = `<img src=\"${inspectedCard.art}\"><p>${inspectedCard.description}</p><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div>`
+        inspectedCardElement.style.backgroundImage = `url(${inspectedCard.art})`;
+        inspectedCardElement.innerHTML = `<p>${inspectedCard.name}</p><p>${inspectedCard.description}</p><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div>`
         cardInspection.append(inspectedCardElement);
     };
     while (playerHand.lastChild) {
@@ -441,7 +440,8 @@ function render() {
     playerHandCards.forEach((val) => {
         const playerHandCardElement = document.createElement("div");
         playerHandCardElement.classList.add("player-hand-card");
-        playerHandCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+        playerHandCardElement.style.backgroundImage = `url(${val.art})`;
+        playerHandCardElement.innerHTML = `<p>${val.name}</p><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
         playerHand.append(playerHandCardElement);
     });
     playerHandListener();
@@ -454,7 +454,8 @@ function render() {
         if (val !== null && val !== "remove") {
             const playerPlayAreaCardElement = document.createElement("div");
             playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
-            playerPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+            playerPlayAreaCardElement.style.backgroundImage = `url(${val.art})`;
+            playerPlayAreaCardElement.innerHTML = `<p>${val.name}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
             playerPlayAreaCardElements.splice(ind,0,playerPlayAreaCardElement);
         };
         if (val === "remove") {
@@ -480,7 +481,8 @@ function render() {
         if (val !== null && val !== "remove") {
             const cpuPlayAreaCardElement = document.createElement("div");
             cpuPlayAreaCardElement.classList.add("card-slot","filled-slot");
-            cpuPlayAreaCardElement.innerHTML = `<img src=\"${val.art}\"><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+            cpuPlayAreaCardElement.style.backgroundImage = `url(${val.art})`;
+            cpuPlayAreaCardElement.innerHTML = `<p>${val.name}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`;
             cpuPlayAreaCardElements.splice(ind,0,cpuPlayAreaCardElement);
         };
         if (val === "remove") {
@@ -528,6 +530,32 @@ function render() {
     };
     gameLog.scrollTo(0, gameLog.scrollHeight);
     console.log("Game Log Scrolled");
+    setTimeout(() => {
+        if (score < -4) {
+            endGame();
+            const gameOverLose = document.createElement("div");
+            gameOverLose.classList = "game-over";
+            gameOverLose.innerHTML = `You Lose<br><button id="reset-button">Play Again</button>`;
+            while (document.body.lastElementChild) {
+                document.body.removeChild(document.body.lastElementChild);
+            };
+            document.body.appendChild(gameOverLose);
+            const resetButton = document.querySelector("#reset-button");
+            resetButton.addEventListener("click", () => {resetGame()});
+        };
+        if (score > 4) {
+            endGame();
+            const gameOverWin = document.createElement("div");
+            gameOverWin.classList = "game-over";
+            gameOverWin.innerHTML = `You Win<br><button id="reset-button">Play Again</button>`;
+            while (document.body.lastElementChild) {
+                document.body.removeChild(document.body.lastElementChild);
+            };
+            document.body.appendChild(gameOverWin);
+            const resetButton = document.querySelector("#reset-button");
+            resetButton.addEventListener("click", () => {resetGame()});
+        };
+    },500);
 };
 let renderCycle = setInterval(() => requestAnimationFrame(render),1000);
 function endGame() {

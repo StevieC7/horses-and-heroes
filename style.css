@@ -45,6 +45,7 @@ h1 {
     grid-column: 1 / span 2;
     display: flex;
     flex-direction: row-reverse;
+    justify-content: space-evenly;
 }
 #card-inspection {
     grid-row: 2 / span 2;
@@ -76,14 +77,21 @@ h1 {
     height: auto;
 }
 .player-hand-card {
-    
+    display: flex;
+    flex-direction: column;
+    width: 20%;
 }
 .player-hand-card img{
-    width: 100%;
+    width: 50%;
     height: auto;
 }
+.filled-slot {
+    font-size: 8px;
+    max-height: 100%;
+    max-width: 100%;
+}
 .filled-slot img {
-    width: 100%;
+    width: 50%;
     height: auto;
 }
 #game-log {
