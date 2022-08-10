@@ -243,7 +243,7 @@ cpuPlayArea.addEventListener("mouseover", event => {
         inspectCard(cpuPlayAreaCards[i]);
     };
 });
-// need callback function for updating the cpu play area model during render cycle
+// below is callback function for updating the cpu play area model during render cycle
 const cpuPlayAreaListener = () => {
     // for (let i = 0; i < 3; i++) {
         if (turn !== turns[1]) {
@@ -254,8 +254,13 @@ const cpuPlayAreaListener = () => {
         }
         cpuDrawCards();
         // TODO - write new AI for cpu below
+        // first loop over hand to see if there are horses
+        // then if there are horses, check to see if there are open slots
+        // if there are open slots, play horses until you are out of horses
+        // next, loop over hand to see if there are any cards left
+        // if there are cards left, pick the one with lowest total power (easy AI)
 
-        // TODO - remove this Original "AI" for MVP below
+        // TODO - remove this Original "AI" for MVP once the new AI is written
         if (cpuHandCards.length >= 1) {
             cpuPlayAreaCards.splice(0,1,cpuHandCards[0]);
             cpuHandCards.splice(0,1);
@@ -441,7 +446,7 @@ function render() {
         const playerHandCardElement = document.createElement("div");
         playerHandCardElement.classList.add("player-hand-card");
         playerHandCardElement.style.backgroundImage = `url(${val.art})`;
-        playerHandCardElement.innerHTML = `<p>${val.name}</p><p>${val.description}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+        playerHandCardElement.innerHTML = `<p>${val.name}</p><p>${val.description}</p><div class="card-stats"><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div></div>`
         playerHand.append(playerHandCardElement);
     });
     playerHandListener();
@@ -455,7 +460,7 @@ function render() {
             const playerPlayAreaCardElement = document.createElement("div");
             playerPlayAreaCardElement.classList.add("card-slot","filled-slot");
             playerPlayAreaCardElement.style.backgroundImage = `url(${val.art})`;
-            playerPlayAreaCardElement.innerHTML = `<p>${val.name}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`
+            playerPlayAreaCardElement.innerHTML = `<p>${val.name}</p><div class="card-stats"><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div></div>`
             playerPlayAreaCardElements.splice(ind,0,playerPlayAreaCardElement);
         };
         if (val === "remove") {

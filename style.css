@@ -9,7 +9,7 @@ body {
     grid-template-columns: repeat(7, 140px);
     grid-template-rows: repeat(4, 100px);
 }
-#grid-wrapper * {
+#grid-wrapper section {
     border: 2px solid black;
     text-align: center;
 }
@@ -32,6 +32,10 @@ h1 {
     justify-content: space-around;
     align-items: center;
     height: 50%;
+    border: 2px solid black;
+}
+.sub-play-area div {
+    border: 2px solid black;
 }
 .sub-play-area p {
     width: 100%;
@@ -79,11 +83,27 @@ h1 {
 .player-hand-card {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 20%;
+    background-position: center;
+    background-size:cover;
+    font-size: 8px;
+    border: 2px solid blue;
+}
+.player-hand-card p {
+    margin: 0;
 }
 .player-hand-card img{
     width: 50%;
     height: auto;
+}
+.card-stats {
+    display: flex;
+    justify-content: space-between;
+}
+.attack-power, .card-health {
+    width: 25%;
+    background-color: white;
 }
 .filled-slot {
     font-size: 8px;
