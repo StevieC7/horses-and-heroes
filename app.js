@@ -263,6 +263,7 @@ const cpuPlayAreaListener = () => {
         // TODO - remove this Original "AI" for MVP once the new AI is written
         if (cpuHandCards.length >= 1) {
             cpuPlayAreaCards.splice(0,1,cpuHandCards[0]);
+            console.log("CPU playing card: " + cpuPlayAreaCards[0]);
             cpuHandCards.splice(0,1);
         };
     // }
@@ -370,14 +371,12 @@ const logEvent = (message) => {
     gameLogDisplay.classList = "game-log-display";
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
-    console.log(gameLogQueue);
     return;
 }
 function fight() {
     if (currentPhase !== "Fight") {
         return;
     }
-        console.log("Fight function begin");
         for (let i = 0; i < 3; i++) {
             // If no opposing card, do damage to score meter.
             if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
@@ -412,7 +411,6 @@ function fight() {
     // }
     // stopTimer();
     render();
-    console.log("Fight function end");
     return;
 };
 
@@ -534,7 +532,6 @@ function render() {
         gameLogQueue.splice(i,1);
     };
     gameLog.scrollTo(0, gameLog.scrollHeight);
-    console.log("Game Log Scrolled");
     setTimeout(() => {
         if (score < -4) {
             endGame();
