@@ -295,7 +295,9 @@ const cpuPlayAreaListener = () => {
         console.log(cpuHandHeroes);
         //      if there are cards left, pick the one with lowest total power (easy AI)
         //          -sort array of cpuHandHeroes by attack power
-        //          -add strongest to cpuPlayAreaCards
+        cpuHandHeroes.sort((a,b) => a.attack - b.attack);
+        console.log(cpuHandHeroes);
+        //          -add weakest to cpuPlayAreaCards
         //          -remove strongest from cpuHandCards
         //      loop over spots to see if there are any with horses
         //      if horse in spot, play card
