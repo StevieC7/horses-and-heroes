@@ -255,6 +255,7 @@ const cpuPlayAreaListener = () => {
         if (currentPhase !== "Fight") {
             return;
         }
+        console.log(cpuHandCards);
         cpuDrawCards();
         // TODO - write new AI for cpu below
         //      first loop over hand to see if there are horses and where they are
@@ -264,6 +265,7 @@ const cpuPlayAreaListener = () => {
                 cpuHandHorses.push(i);
             };
         };
+        console.log(cpuHandCards);
         console.log(cpuHandHorses);
         //      then if there are horses, check to see if there are open slots and where they are
         let openSlots = [];
@@ -280,16 +282,21 @@ const cpuPlayAreaListener = () => {
         while (openSlots.length > 0 && cpuHandHorses.length > 0) {
             console.log("horseplay while loop running");
             cpuPlayAreaCards.splice(openSlots[horsePlayIterator],1,cpuHandCards[cpuHandHorses[horsePlayIterator]]);
-            cpuHandHorses.shift();
+            console.log("Spliced " + cpuHandCards[cpuHandHorses[horsePlayIterator]].name + " into cpuPlayArea at " + openSlots[horsePlayIterator]);
             cpuHandCards.splice(cpuHandHorses[horsePlayIterator],1);
+            cpuHandHorses.shift();
             horsePlayIterator++;
         };
         //      next, loop over hand to see if there are any cards left
         let cpuHandHeroes = [];
         for (let i = 0; i < cpuHandCards.length; i++) {
-            cpuHandHeroes.push(i);
+            cpuHandHeroes.push(cpuHandCards[i]);
         };
+        console.log(cpuHandHeroes);
         //      if there are cards left, pick the one with lowest total power (easy AI)
+        //          -sort array of cpuHandHeroes by attack power
+        //          -add strongest to cpuPlayAreaCards
+        //          -remove strongest from cpuHandCards
         //      loop over spots to see if there are any with horses
         //      if horse in spot, play card
 
