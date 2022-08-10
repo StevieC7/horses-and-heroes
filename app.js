@@ -425,9 +425,15 @@ function fight() {
     // console.log("Current phase: " + currentPhase);
     turn = turns[0];
     // console.log("Current turn set by fight during render: " + turn);
+    // let postFightRenderDelay = setTimeout(() => render(),5000);
+    // function stopTimer() {
+    //     clearTimeout(postFightRenderDelay);
+    //     postFightRenderDelay = null;
+    // }
+    // stopTimer();
     render();
     return;
-}
+};
 
 // Invoke the main render function (transfer state variables to DOM)
 function render() {
@@ -546,7 +552,8 @@ function render() {
     // STRETCH: update cpu hand graphics
     if (currentPhase === "Fight") {
         cpuPlayAreaListener();
-        fight();
+        let preFightRenderDelay = setTimeout(() => fight(),5000);
+        // fight();
         // render();
     };
     // update score display
@@ -559,11 +566,11 @@ function render() {
     scoreMeter.append(scoreMeterDisplay);
     // console.log(playerPlayAreaCardElements);
 };
-// let intervalID = setInterval(() => render(),500);
-// function endGame() {
-//     clearInterval(intervalID);
-//     intervalID = null;
-// }
+let intervalID = setInterval(() => render(),500);
+function endGame() {
+    clearInterval(intervalID);
+    intervalID = null;
+}
 
     // Wait for user to trigger event (loop/timer ?)
     
