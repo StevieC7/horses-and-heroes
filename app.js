@@ -509,7 +509,6 @@ function render() {
         cpuPlayArea.children[i].replaceWith(cpuPlayAreaCardElements[i]);
     };
     // update game log
-    // update horse deck
     // STRETCH: update hero deck graphics
     // STRETCH: update cpu hand graphics
     if (currentPhase === "Fight") {
@@ -517,7 +516,6 @@ function render() {
         const fightDelay = (ms) => new Promise(resolve => setTimeout(resolve,ms));
         fightDelay(3000).then(() => fight());
     };
-    // update score display
     while (scoreMeter.children.length > 1) {
         scoreMeter.removeChild(scoreMeter.lastChild);
     };
