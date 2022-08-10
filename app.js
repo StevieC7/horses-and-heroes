@@ -159,7 +159,7 @@ const cpuFirstDrawCards = () => {
         tempCpuDraw.push(cpuDeckCards[i]);
     }
     currentPhase = phases[2];
-    logEvent(`Now it's time to ${currentPhase}`);
+    // logEvent(`Now it's time to ${currentPhase}`);
     return tempCpuDraw;
 };
 const cpuDrawCards = () => {
@@ -368,6 +368,7 @@ const logEvent = (message) => {
     gameLogDisplay.classList = "game-log-display";
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
+    console.log(gameLogQueue);
     return;
 }
 function fight() {
@@ -398,10 +399,10 @@ function fight() {
                 cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
             };
         };
-    currentPhase = "Draw";
-    logEvent(`Now it's time to ${currentPhase}`);
     turn = turns[0];
     logEvent(`Turn: ${turn}`);
+    currentPhase = "Draw";
+    logEvent(`Now it's time to ${currentPhase}`);
     // let postFightRenderDelay = setTimeout(() => render(),5000);
     // function stopTimer() {
     //     clearTimeout(postFightRenderDelay);
@@ -524,7 +525,7 @@ function render() {
         if (gameLogQueue[i] !== null) {
             gameLog.append(gameLogQueue[i]);
         };
-        gameLogQueue[i].splice(i,1);
+        gameLogQueue.splice(i,1);
     };
 };
 let renderCycle = setInterval(() => requestAnimationFrame(render),1000);
