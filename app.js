@@ -251,6 +251,7 @@ const cpuAI = () => {
 const playerPlayAreaListener = () => {
     const playerPlayAreaChildren = playerPlayArea.children;
     for (let i = 0; i < playerPlayAreaChildren.length; i++) {
+        console.log("Adding event listener to " + playerPlayAreaChildren[i]);
         // playerPlayAreaChildren[i].addEventListener("mouseover", () => {
         //     inspectCard(playerPlayAreaCards[i]);
         // });
@@ -273,11 +274,13 @@ const playerPlayAreaListener = () => {
                 playerPlayAreaCards.splice(i,1,cloneCards(selectedCard));
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
+                inspectedCard = null;
                 return;
             };
             // if card slot is not empty and user has just clicked a horse card from hand, do nothing
             if (playerPlayAreaCards[i] !== null && selectedCard.name === "Horse") {
                 selectedCard = null;
+                inspectedCard = null;
                 return;
             };
             // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
@@ -285,12 +288,14 @@ const playerPlayAreaListener = () => {
                 playerPlayAreaCards.splice(i,1,cloneCards(selectedCard));
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
+                inspectedCard = null;
                 return;
             };
             // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
             if (playerPlayAreaCards[i] === null && selectedCard.name !== "Horse") {
                 alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
                 selectedCard = null;
+                inspectedCard = null;
                 return;
             };
         });
@@ -395,8 +400,10 @@ function render() {
     };
     while (cardInspection.lastChild) {
         cardInspection.removeChild(cardInspection.lastChild);
+        console.log("Removing last child of card inspection.")
     };
     if (inspectedCard !== null && inspectedCard !== undefined) {
+        console.log("Rendering inspected card: " + inspectedCard.name);
         const inspectedCardElement = document.createElement("div");
         const inspectedCardDescription = document.createElement("div");
         inspectedCardDescription.id = "inspected-card-description";
