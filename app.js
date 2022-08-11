@@ -302,6 +302,7 @@ const playerPlayAreaListener = () => {
     }
     return;
 };
+// playerPlayAreaListener();
 horseDeck.addEventListener("click", () => {
     if (turn !== "Player") {
         return;
