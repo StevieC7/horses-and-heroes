@@ -5,7 +5,7 @@
 1. Decks shuffled and set for play
 2. Players draw their hands
 3. Play phase
-    -(expect first turn) Player draws either a horse or a hero card. The horse deck is an unlimited supply.
+    -(except first turn) Player draws either a horse or a hero card. The horse deck is an unlimited supply.
     -Player may play as many cards in one turn as there are available spots on their side of the board.
     -Player may play a horse into an empty spot. Horses are weak, but necessary to play heroes.
     -Player may play a hero onto a horse, but not onto an empty spot. If played onto horse, the mounted horse is removed from play.
