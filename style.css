@@ -56,7 +56,7 @@ h1 {
     background-size: contain;
     transform:scaleY(-1);
 }
-#cpu-play-area * {
+#cpu-play-area .card-slot {
     transform:scaleY(-1);
 }
 .card-slot {
@@ -213,16 +213,23 @@ h1 {
 .card-stats {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
     border: none !important;
+    height: 15%;
 }
 .attack-power, .card-health {
+    display: flex;
     width: 25%;
+    height: 100%;
     font-size: 12px;
     background-color: white;
     border: none !important;
+    color: black;
+    align-items: center;
+    justify-content: center;
 }
 .filled-slot {
-    font-size: 8px;
+    font-size: 15px;
     max-height: 100%;
     max-width: 100%;
     background-position: center;
@@ -230,4 +237,12 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    color: white;
+    font-weight: bold;
+}
+footer {
+    width: 50%;
+    margin-top: 10%;
+    background-color: antiquewhite;
+    padding: 2%;
 }
