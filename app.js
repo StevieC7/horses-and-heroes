@@ -283,7 +283,7 @@ const cpuPlayAreaListener = () => {
         let horsePlayIterator = 0;
         while (horsePlayIterator < cpuHandHorses.length && horsePlayIterator < openSlots.length) {
             console.log("horseplay while loop running on cpuPlayArea " + openSlots[horsePlayIterator] + " and inserting " + cpuHandCards[cpuHandHorses[horsePlayIterator]]);
-            cpuPlayAreaCards.splice(openSlots[horsePlayIterator],1,cpuHandCards[cpuHandHorses[horsePlayIterator]]);
+            cpuPlayAreaCards.splice(openSlots[horsePlayIterator],1,cloneCards(cpuHandCards[cpuHandHorses[horsePlayIterator]]));
             console.log("CPU playing " + cpuHandCards[cpuHandHorses[horsePlayIterator]].name);
             // cpuHandHorses.shift();
             horsePlayIterator++;
@@ -295,8 +295,8 @@ const cpuPlayAreaListener = () => {
         //      next, loop over hand to see if there are any cards left
         let cpuHandHeroes = [];
         for (let i = 0; i < cpuHandCards.length; i++) {
-            cpuHandHeroes.push(cpuHandCards[i]);
-            console.log("CPU found hero at " + cpuHandCards[i]);
+            cpuHandHeroes.push(i);
+            console.log("CPU found hero at " + cpuHandHeroes[i]);
         };
         // console.log(cpuHandHeroes);
         //      if there are cards left, pick the one with lowest total power (easy AI)
@@ -305,11 +305,14 @@ const cpuPlayAreaListener = () => {
         // console.log(cpuHandHeroes);
         //      loop over spots to see if there are any with horses
         for (let i = 0; i < cpuPlayAreaCards.length;i++) {
+            console.log("CPU looking for horse to play hero on");
             if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].name === "Horse") {
-                cpuPlayAreaCards.splice(i,1,cpuHandHeroes[i]);
-                console.log("CPU playing " + cpuHandHeroes[i].name);
+                cpuPlayAreaCards.splice(i,1,cloneCards(cpuHandCards[i]));
+                console.log("CPU hand cards before playing" + cpuHandCards);
+                console.log("CPU played " + cpuHandCards[i].name);
                 cpuHandCards.splice(cpuHandCards.indexOf(cpuHandHeroes[i]),1);
-                console.log("CPU removing " + cpuHandCards.indexOf(cpuHandHeroes[i]));
+                console.log("CPU hand cards after playing" + cpuHandCards);
+                console.log("CPU removed card " + cpuHandCards[cpuHandHeroes[i]].name + " at " + cpuHandHeroes[i]);
             };
         };
         console.log("CPU now has " + cpuHandCards.length + " cards.");
@@ -351,7 +354,7 @@ const playerPlayAreaListener = () => {
             };
             // if card slot is empty and user has just clicked a horse card from hand, play it and remove it from player hand
             if (playerPlayAreaCards[i] === null && selectedCard.name === "Horse") {
-                playerPlayAreaCards.splice(i,1,selectedCard);
+                playerPlayAreaCards.splice(i,1,cloneCards(selectedCard));
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
                 return;
@@ -363,7 +366,7 @@ const playerPlayAreaListener = () => {
             };
             // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
             if (playerPlayAreaCards[i].name === "Horse" && selectedCard.name !== "Horse") {
-                playerPlayAreaCards.splice(i,1,selectedCard);
+                playerPlayAreaCards.splice(i,1,cloneCards(selectedCard));
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
                 return;
@@ -442,6 +445,7 @@ function fight() {
                 score += playerPlayAreaCards[i].attack;
                 // return;
             };
+            // BUG HERE
             if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
                 // Apply attack power of each card to the other. 
                 cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
