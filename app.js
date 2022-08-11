@@ -111,8 +111,8 @@ const randomizeCpuCards = () => {
 const playerDrawCards = () => {
     let tempPlayerDraw = [];
     tempPlayerDraw.push(cloneCards(horseDeckCards[0]));
-    tempPlayerDraw.push(cloneCards(heroDeckCards[0]),cloneCards(heroDeckCards[1]),cloneCards(heroDeckCards[2]));
-    heroDeckCards.splice(0,3);
+    tempPlayerDraw.push(cloneCards(heroDeckCards[0]),cloneCards(heroDeckCards[1]),cloneCards(heroDeckCards[2]),cloneCards(heroDeckCards[3]),cloneCards(heroDeckCards[4]));
+    heroDeckCards.splice(0,4);
     currentPhase = phases[2];
     logEvent(`Now it's time to ${currentPhase}`);
     return tempPlayerDraw;
@@ -130,10 +130,10 @@ const cpuDrawCards = () => {
     cpuHorseDeck.push(cloneCards(horse));
     let cpuHeroDeck = [];
     cpuHeroDeck.push(cloneCards(heroDeckCards[0]));
-    let picker = Math.random();
-    if (picker < 0.5) {
+    if (cpuPlayAreaCards[0] === null && cpuPlayAreaCards[1] === null && cpuPlayAreaCards[2] === null) {
         cpuHandCards.push(cpuHorseDeck[0]);
-    } else if (picker >= 0.5 && cpuHeroDeck.length >= 1){
+        return;
+    } else if (cpuHeroDeck.length >= 1){
         cpuHandCards.push(cpuHeroDeck[0]);
         cpuHeroDeck.shift();
     };
@@ -187,16 +187,15 @@ cpuPlayArea.addEventListener("mouseover", event => {
     };
 });
 const cpuAI = () => {
-    console.log("cpuAI is running");
     if (turn !== turns[1]) {
         return;
     }
     if (currentPhase !== "Fight") {
         return;
     }
-    console.log("AI logic running.")
     cpuDrawCards();
-    console.log("CPU drew a card. CPU now has " + cpuHandCards.length + " cards.");
+    console.log("CPU drew: " + cpuHandCards[cpuHandCards.length -1].name);
+    logEvent("CPU drew a card.");
     let cpuHandHorses = [];
     for (let i = 0; i < cpuHandCards.length; i++) {
         if (cpuHandCards[i].name === "Horse") {
@@ -218,6 +217,7 @@ const cpuAI = () => {
         console.log("horseplay while loop running on cpuPlayArea " + openSlots[horsePlayIterator] + " and inserting " + cpuHandCards[cpuHandHorses[horsePlayIterator]]);
         cpuPlayAreaCards.splice(openSlots[horsePlayIterator],1,cloneCards(cpuHandCards[cpuHandHorses[horsePlayIterator]]));
         console.log("CPU playing " + cpuHandCards[cpuHandHorses[horsePlayIterator]].name);
+        logEvent(`CPU played ${cpuHandCards[cpuHandHorses[horsePlayIterator]].name}`);
         horsePlayIterator++;
     };
     for (let i = 0; i < cpuHandHorses.length; i++) {
@@ -236,6 +236,7 @@ const cpuAI = () => {
             cpuPlayAreaCards.splice(i,1,cloneCards(cpuHandCards[i]));
             console.log("CPU hand cards before playing" + cpuHandCards);
             console.log("CPU played " + cpuHandCards[i].name);
+            logEvent(`CPU played ${cpuHandCards[i].name}`);
             cpuHandCards.splice(cpuHandCards.indexOf(cpuHandHeroes[i]),1);
             console.log("CPU hand cards after playing" + cpuHandCards);
             console.log("CPU removed card " + cpuHandCards[cpuHandHeroes[i]].name + " at " + cpuHandHeroes[i]);
@@ -333,9 +334,10 @@ function init() {
 const logEvent = (message) => {
     const gameLogDisplay = document.createElement("p");
     gameLogDisplay.classList = "game-log-display";
-    gameLogDisplay.style.marginBottom = "20px";
+    gameLogDisplay.style.marginBottom = "10px";
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
+    requestAnimationFrame(() => {gameLog.scrollTo(0, gameLog.scrollHeight)});
     return;
 }
 
@@ -484,7 +486,6 @@ function render() {
         };
         gameLogQueue.splice(i,1);
     };
-    gameLog.scrollTo(0, gameLog.scrollHeight);
     setTimeout(() => {
         if (score < -4) {
             endGame();

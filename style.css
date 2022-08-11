@@ -75,6 +75,10 @@ h1 {
     overflow-y: auto;
     height: 100%;
 }
+#game-log-title {
+    background-color: antiquewhite;
+    padding: 5px;
+}
 #horse-deck {
     grid-row: 4 / span 1;
     grid-column: 6 / span 1;
