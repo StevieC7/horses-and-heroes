@@ -50,7 +50,7 @@ const cpuHand = document.querySelector("#cpu-hand");
 const horseDeck = document.querySelector("#horse-deck");
 const heroDeck = document.querySelector("#hero-deck");
 const scoreMeter = document.querySelector("#score");
-const gameLog = document.querySelector("#game-log");
+const gameLog = document.querySelector("#game-log-scroll");
 const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
 const endTurnButton = document.querySelector("#end-turn-button");
@@ -333,7 +333,7 @@ function init() {
 const logEvent = (message) => {
     const gameLogDisplay = document.createElement("p");
     gameLogDisplay.classList = "game-log-display";
-    gameLogDisplay.style.marginBottom = `${gameLog.clientHeight -180}px`;
+    gameLogDisplay.style.marginBottom = "20px";
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
     return;
@@ -344,7 +344,6 @@ function fight() {
         return;
     }
         for (let i = 0; i < 3; i++) {
-            // If no opposing card, do damage to score meter.
             if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
                 score -= cpuPlayAreaCards[i].attack;
                 logEvent(`CPU's ${cpuPlayAreaCards[i].name} dealt you ${cpuPlayAreaCards[i].attack} damage.`);
