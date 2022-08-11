@@ -255,8 +255,10 @@ const cpuPlayAreaListener = () => {
         if (currentPhase !== "Fight") {
             return;
         }
-        console.log(cpuHandCards);
+        console.log("AI logic running.")
+        // cpuHandCards.forEach((val) => console.log(val));
         cpuDrawCards();
+        console.log("CPU drew a card. CPU now has " + cpuHandCards.length + " cards.");
         // TODO - write new AI for cpu below
         //      first loop over hand to see if there are horses and where they are
         let cpuHandHorses = [];
@@ -265,7 +267,7 @@ const cpuPlayAreaListener = () => {
                 cpuHandHorses.push(i);
             };
         };
-        console.log(cpuHandCards);
+        // cpuHandCards.forEach((val) => console.log(val));
         console.log(cpuHandHorses);
         //      then if there are horses, check to see if there are open slots and where they are
         let openSlots = [];
@@ -279,28 +281,39 @@ const cpuPlayAreaListener = () => {
         console.log(openSlots);
         //      if there are open slots and horses, play horses until you are out of horses
         let horsePlayIterator = 0;
-        while (openSlots.length > 0 && cpuHandHorses.length > 0) {
-            console.log("horseplay while loop running");
+        while (horsePlayIterator < cpuHandHorses.length && horsePlayIterator < openSlots.length) {
+            console.log("horseplay while loop running on cpuPlayArea " + openSlots[horsePlayIterator] + " and inserting " + cpuHandCards[cpuHandHorses[horsePlayIterator]]);
             cpuPlayAreaCards.splice(openSlots[horsePlayIterator],1,cpuHandCards[cpuHandHorses[horsePlayIterator]]);
-            console.log("Spliced " + cpuHandCards[cpuHandHorses[horsePlayIterator]].name + " into cpuPlayArea at " + openSlots[horsePlayIterator]);
-            cpuHandCards.splice(cpuHandHorses[horsePlayIterator],1);
-            cpuHandHorses.shift();
+            console.log("CPU playing " + cpuHandCards[cpuHandHorses[horsePlayIterator]].name);
+            // cpuHandHorses.shift();
             horsePlayIterator++;
+        };
+        for (let i = 0; i < cpuHandHorses.length; i++) {
+            console.log("Removing horse at " + cpuHandHorses[i] + " from hand.");
+            cpuHandCards.splice(cpuHandHorses[i],1);
         };
         //      next, loop over hand to see if there are any cards left
         let cpuHandHeroes = [];
         for (let i = 0; i < cpuHandCards.length; i++) {
             cpuHandHeroes.push(cpuHandCards[i]);
+            console.log("CPU found hero at " + cpuHandCards[i]);
         };
-        console.log(cpuHandHeroes);
+        // console.log(cpuHandHeroes);
         //      if there are cards left, pick the one with lowest total power (easy AI)
         //          -sort array of cpuHandHeroes by attack power
         cpuHandHeroes.sort((a,b) => a.attack - b.attack);
-        console.log(cpuHandHeroes);
-        //          -add weakest to cpuPlayAreaCards
-        //          -remove strongest from cpuHandCards
+        // console.log(cpuHandHeroes);
         //      loop over spots to see if there are any with horses
-        //      if horse in spot, play card
+        for (let i = 0; i < cpuPlayAreaCards.length;i++) {
+            if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].name === "Horse") {
+                cpuPlayAreaCards.splice(i,1,cpuHandHeroes[i]);
+                console.log("CPU playing " + cpuHandHeroes[i].name);
+                cpuHandCards.splice(cpuHandCards.indexOf(cpuHandHeroes[i]),1);
+                console.log("CPU removing " + cpuHandCards.indexOf(cpuHandHeroes[i]));
+            };
+        };
+        console.log("CPU now has " + cpuHandCards.length + " cards.");
+        //      if horse in spot, play hero card
 
         // TODO - remove this Original "AI" for MVP once the new AI is written
         // if (cpuHandCards.length >= 1) {
