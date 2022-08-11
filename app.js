@@ -11,17 +11,17 @@ class Card {
         cardList.push(this);
     }
 };
-const horse = new Card("Horse",1,1,"Just a regular horse.","https://placekitten.com/200/300");
+const horse = new Card("Horse",1,1,"Just a regular horse.","/assets/horse.png");
 horse.addToCardList();
-const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","https://placekitten.com/200/300");
+const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","/assets/Gregor.png");
 gregor.addToCardList();
-const aaron = new Card("Aaron",3,3,"It's pronounced A-A-ron!","https://placekitten.com/200/300");
+const aaron = new Card("Aaron",3,3,"It's pronounced A-A-ron!","/assets/Aaron.png");
 aaron.addToCardList();
-const stinker = new Card("Stinker",1,3,"He's a little stinker, ain't he?","https://placekitten.com/200/300");
+const stinker = new Card("Stinker",1,3,"He's a little stinker, ain't he?","/assets/Stinker.png");
 stinker.addToCardList();
-const sirstabsalot = new Card("Sir Stabsalot",5,2,"He won't tell us where he keeps the knives.","https://placekitten.com/200/300");
+const sirstabsalot = new Card("Sir Stabsalot",5,2,"He won't tell us where he keeps the knives.","/assets/Sirstabsalot.png");
 sirstabsalot.addToCardList();
-const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","https://placekitten.com/200/300");
+const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","/assets/Stonewall.png");
 stonewall.addToCardList();
 
 let score;
@@ -393,10 +393,14 @@ function render() {
     };
     if (inspectedCard !== null && inspectedCard !== undefined) {
         const inspectedCardElement = document.createElement("div");
-        inspectedCardElement.classList.add("inspected-card");
+        const inspectedCardDescription = document.createElement("div");
+        inspectedCardDescription.id = "inspected-card-description";
+        inspectedCardDescription.innerHTML = `${inspectedCard.description}`;
+        inspectedCardElement.id = "inspected-card";
         inspectedCardElement.style.backgroundImage = `url(${inspectedCard.art})`;
-        inspectedCardElement.innerHTML = `<p>${inspectedCard.name}</p><p>${inspectedCard.description}</p><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div>`
+        inspectedCardElement.innerHTML = `<p>${inspectedCard.name}</p><div class="card-stats"><div class=\"attack-power\">${inspectedCard.attack}</div><div class=\"card-health\">${inspectedCard.health}</div></div>`
         cardInspection.append(inspectedCardElement);
+        cardInspection.append(inspectedCardDescription);
     };
     while (playerHand.lastChild) {
         playerHand.removeChild(playerHand.lastChild);
@@ -405,7 +409,7 @@ function render() {
         const playerHandCardElement = document.createElement("div");
         playerHandCardElement.classList.add("player-hand-card");
         playerHandCardElement.style.backgroundImage = `url(${val.art})`;
-        playerHandCardElement.innerHTML = `<p>${val.name}</p><p>${val.description}</p><div class="card-stats"><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div></div>`
+        playerHandCardElement.innerHTML = `<p>${val.name}</p><div class="card-stats"><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div></div>`
         playerHand.append(playerHandCardElement);
     });
     playerHandListener();
