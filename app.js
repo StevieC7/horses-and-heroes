@@ -11,7 +11,7 @@ class Card {
         cardList.push(this);
     }
 };
-const horse = new Card("Horse",1,1,"Just a regular horse.","/assets/horse.png");
+const horse = new Card("Horse",1,1,"Just a regular horse.","./assets/horse.png");
 horse.addToCardList();
 const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","/assets/Gregor.png");
 gregor.addToCardList();
@@ -341,7 +341,6 @@ const logEvent = (message) => {
     gameLogDisplay.style.marginBottom = "10px";
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
-    requestAnimationFrame(() => {gameLog.scrollTo(0, gameLog.scrollHeight)});
     return;
 }
 
@@ -522,6 +521,7 @@ function render() {
             resetButton.addEventListener("click", () => {resetGame()});
         };
     },500);
+    gameLog.scrollTo(0, gameLog.scrollHeight);
 };
 let renderCycle = setInterval(() => requestAnimationFrame(render),1000);
 function endGame() {
