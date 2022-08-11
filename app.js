@@ -333,7 +333,7 @@ function init() {
 const logEvent = (message) => {
     const gameLogDisplay = document.createElement("p");
     gameLogDisplay.classList = "game-log-display";
-    gameLogDisplay.style.marginBottom = `${gameLog.clientHeight -100}px`;
+    gameLogDisplay.style.marginBottom = `${gameLog.clientHeight -180}px`;
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
     return;
@@ -347,19 +347,18 @@ function fight() {
             // If no opposing card, do damage to score meter.
             if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
                 score -= cpuPlayAreaCards[i].attack;
-                // return;
+                logEvent(`CPU's ${cpuPlayAreaCards[i].name} dealt you ${cpuPlayAreaCards[i].attack} damage.`);
             };
             if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
                 score += playerPlayAreaCards[i].attack;
-                // return;
+                logEvent(`Your ${playerPlayAreaCards[i].name} dealt the CPU ${playerPlayAreaCards[i].attack} damage.`);
             };
-            // BUG HERE
             if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
-                // Apply attack power of each card to the other. 
                 cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
+                logEvent(`Your ${playerPlayAreaCards[i].name} damaged CPU's ${cpuPlayAreaCards[i].name} for ${playerPlayAreaCards[i].attack}`);
                 playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
+                logEvent(`CPU's ${cpuPlayAreaCards[i].name} damaged your ${playerPlayAreaCards[i].name} for ${cpuPlayAreaCards[i].attack}`);
             };
-            // If health of card <= 0, remove card.
             if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
                 playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
             };
@@ -368,9 +367,11 @@ function fight() {
             };
         };
     turn = turns[0];
-    logEvent(`Turn: ${turn}`);
     currentPhase = "Draw";
-    logEvent(`Now it's time to ${currentPhase}`);
+    setTimeout(() => {
+        logEvent(`Turn: ${turn}`);
+        logEvent(`Now it's time to ${currentPhase}`);
+    },200);
     render();
     return;
 };
