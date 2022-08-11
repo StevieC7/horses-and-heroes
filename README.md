@@ -5,7 +5,11 @@ This was made in homage to the game [Inscryption](https://www.devolverdigital.co
 Play horses, then mount heroes on them to build your army. Attack empty spaces on your opponent's side of the board to score points based on your card's attack power. Get the score meter up to 5 to win.
 
 # Screenshots
-![Screenshot 1](./screenshots/screenshot1.png)
+**Start Screen:**
+![Screenshot 1](./screenshots/screenshot1.png
+**Player hand effect on hover:**
+https://user-images.githubusercontent.com/46426105/184241026-19c1224f-b908-4a13-a278-6186631330d1.mov
+
 # Technologies Used
 - JavaScript (vanilla)
 - HTML
