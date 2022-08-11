@@ -82,10 +82,6 @@ const drawHero = () => {
 const inspectCard = (card) => {
     inspectedCard = card;
 };
-// STRETCH
-// const peekCard = (cardIndex) => {
-//     peekedCard = cardIndex;
-// };
 const selectCard = (card) => {
     selectedCard = card;
 };
@@ -147,8 +143,6 @@ const endTurn = () => {
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
-        // playerPlayArea.style.marginBottom = "100px";
-        // cpuPlayArea.style.marginTop = "100px";
         cpuAI();
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
@@ -156,8 +150,6 @@ const endTurn = () => {
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
-        // playerPlayArea.style.marginBottom = "100px";
-        // cpuPlayArea.style.marginTop = "100px";
         cpuAI();
         return;
     };
@@ -169,9 +161,6 @@ const playerHandListener = () => {
             inspectCard(playerHandCards[i]);
             selectCard(playerHandCards[i]);
         });
-        // playerHandChildren[i].addEventListener("mouseover", () => {
-        //     peekCard(playerHandCards[i]);
-        // });
     };
 };
 const cpuPlayAreaListener = () => {
@@ -182,14 +171,6 @@ const cpuPlayAreaListener = () => {
         })
     }
 }
-// cpuPlayArea.addEventListener("mouseover", event => {
-//     for (let i = 0; i < cpuPlayArea.children.length; i++) {
-//         if (event.target !== cpuPlayArea.children[i]) {
-//             return;
-//         };
-//         inspectCard(cpuPlayAreaCards[i]);
-//     };
-// });
 const cpuAI = () => {
     if (turn !== turns[1]) {
         return;
@@ -252,24 +233,17 @@ const playerPlayAreaListener = () => {
     const playerPlayAreaChildren = playerPlayArea.children;
     for (let i = 0; i < playerPlayAreaChildren.length; i++) {
         console.log("Adding event listener to " + playerPlayAreaChildren[i]);
-        // playerPlayAreaChildren[i].addEventListener("mouseover", () => {
-        //     inspectCard(playerPlayAreaCards[i]);
-        // });
         playerPlayAreaChildren[i].addEventListener("click", (e) => {
             e.stopImmediatePropagation();
-            // if not user's turn, do nothing
             if (turn !== "Player") {
                 return;
             };
-            // if not play phase, do nothing
             if (currentPhase !== "Play") {
                 return;
             };
-            // if user has not just clicked a card from hand, do nothing
             if (selectedCard === null) {
                 return;
             };
-            // if card slot is empty and user has just clicked a horse card from hand, play it and remove it from player hand
             if (playerPlayAreaCards[i] === null && selectedCard.name === "Horse") {
                 playerPlayAreaCards.splice(i,1,cloneCards(selectedCard));
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
@@ -277,13 +251,11 @@ const playerPlayAreaListener = () => {
                 inspectedCard = null;
                 return;
             };
-            // if card slot is not empty and user has just clicked a horse card from hand, do nothing
             if (playerPlayAreaCards[i] !== null && selectedCard.name === "Horse") {
                 selectedCard = null;
                 inspectedCard = null;
                 return;
             };
-            // if card slot has horse card and user has just clicked hero card from hand, play it and remove it from player hand
             if (playerPlayAreaCards[i].name === "Horse" && selectedCard.name !== "Horse") {
                 playerPlayAreaCards.splice(i,1,cloneCards(selectedCard));
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
@@ -291,7 +263,6 @@ const playerPlayAreaListener = () => {
                 inspectedCard = null;
                 return;
             };
-            // if card slot is empty and user has just clicked hero card to play, alert player of illegal move
             if (playerPlayAreaCards[i] === null && selectedCard.name !== "Horse") {
                 alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
                 selectedCard = null;
@@ -302,7 +273,6 @@ const playerPlayAreaListener = () => {
     }
     return;
 };
-// playerPlayAreaListener();
 horseDeck.addEventListener("click", () => {
     if (turn !== "Player") {
         return;
@@ -321,6 +291,14 @@ heroDeck.addEventListener("click", () => {
     };
     return drawHero();
 });
+const logEvent = (message) => {
+    const gameLogDisplay = document.createElement("p");
+    gameLogDisplay.classList = "game-log-display";
+    gameLogDisplay.style.marginBottom = "10px";
+    gameLogDisplay.innerHTML = message;
+    gameLogQueue.push(gameLogDisplay);
+    return;
+}
 startButton.addEventListener("click", () => {init()});
 resetButton.addEventListener("click", () => {resetGame()});
 endTurnButton.addEventListener("click", () => {endTurn()});
@@ -341,14 +319,6 @@ function init() {
     selectedCard = null;
     render();
 };
-const logEvent = (message) => {
-    const gameLogDisplay = document.createElement("p");
-    gameLogDisplay.classList = "game-log-display";
-    gameLogDisplay.style.marginBottom = "10px";
-    gameLogDisplay.innerHTML = message;
-    gameLogQueue.push(gameLogDisplay);
-    return;
-}
 
 function fight() {
     if (currentPhase !== "Fight") {
@@ -426,10 +396,6 @@ function render() {
         playerHand.append(playerHandCardElement);
     });
     playerHandListener();
-    // STRETCH
-    // update peeked card
-    // const peekedCardElement = document
-    // peekedCardElement.style.margin = "-10px 0px 10px -10px";
     let playerPlayAreaCardElements = [];
     playerPlayAreaCards.forEach((val,ind) => {
         if (val !== null && val !== "remove") {
@@ -484,8 +450,6 @@ function render() {
         cpuPlayArea.children[i].replaceWith(cpuPlayAreaCardElements[i]);
     };
     cpuPlayAreaListener();
-    // STRETCH: update hero deck graphics
-    // STRETCH: update cpu hand graphics
     while (cpuHand.children.length > 1) {
         cpuHand.removeChild(cpuHand.lastChild);
     }
