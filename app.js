@@ -13,15 +13,15 @@ class Card {
 };
 const horse = new Card("Horse",1,1,"Just a regular horse.","./assets/horse.png");
 horse.addToCardList();
-const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","assets/Gregor.png");
+const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","./assets/Gregor.png");
 gregor.addToCardList();
-const aaron = new Card("Aaron",3,3,"It's pronounced A-A-ron!","/assets/Aaron.png");
+const aaron = new Card("Aaron",3,3,"It's pronounced A-A-ron!","./assets/Aaron.png");
 aaron.addToCardList();
-const stinker = new Card("Stinker",1,3,"He's a little stinker, ain't he?","/assets/Stinker.png");
+const stinker = new Card("Stinker",1,3,"He's a little stinker, ain't he?","./assets/Stinker.png");
 stinker.addToCardList();
-const sirstabsalot = new Card("Sir Stabsalot",5,2,"He won't tell us where he keeps the knives.","/assets/Sirstabsalot.png");
+const sirstabsalot = new Card("Sir Stabsalot",5,2,"He won't tell us where he keeps the knives.","./assets/Sirstabsalot.png");
 sirstabsalot.addToCardList();
-const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","/assets/Stonewall.png");
+const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","./assets/Stonewall.png");
 stonewall.addToCardList();
 
 let score;
