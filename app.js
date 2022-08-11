@@ -13,7 +13,7 @@ class Card {
 };
 const horse = new Card("Horse",1,1,"Just a regular horse.","./assets/horse.png");
 horse.addToCardList();
-const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","/assets/Gregor.png");
+const gregor = new Card("Gregor",2,2,"Slightly better than a horse.","assets/Gregor.png");
 gregor.addToCardList();
 const aaron = new Card("Aaron",3,3,"It's pronounced A-A-ron!","/assets/Aaron.png");
 aaron.addToCardList();
