@@ -10,7 +10,7 @@ Play horses, then mount heroes on them to build your army. Attack empty spaces o
 **Mid-Game View**  
 ![Screenshot 2](./screenshots/screenshot2.png)
 **Quick Demo:**
-![Screen Recording 1](./screenshots/screen-recording1.mov)
+https://user-images.githubusercontent.com/46426105/184243189-6bfaf860-d39c-417a-a452-15f5356ec7c3.mov
 
 # Technologies Used
 - JavaScript (vanilla)
