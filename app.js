@@ -486,6 +486,14 @@ function render() {
     cpuPlayAreaListener();
     // STRETCH: update hero deck graphics
     // STRETCH: update cpu hand graphics
+    while (cpuHand.children.length > 1) {
+        cpuHand.removeChild(cpuHand.lastChild);
+    }
+    for (let i = 0; i < cpuHandCards.length; i++) {
+        const cpuHandCardElement = document.createElement("div");
+        cpuHandCardElement.classList = "cpu-hand-card";
+        cpuHand.append(cpuHandCardElement);
+    }
     if (currentPhase === "Fight") {
         const fightDelay = (ms) => new Promise(resolve => setTimeout(resolve,ms));
         playerPlayArea.style.marginBottom = "100px";
