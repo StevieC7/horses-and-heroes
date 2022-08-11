@@ -24,7 +24,7 @@ sirstabsalot.addToCardList();
 const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","./assets/Stonewall.png");
 stonewall.addToCardList();
 
-let score;
+let score = 0;
 const turns = ["Player","CPU"];
 let turn;
 const phases = ["Setup","Draw","Play","Fight"];

@@ -1,11 +1,11 @@
 # Horses and Heroes
-This was made in homage to the game Inscryption by Devolver Digital.
+This was made in homage to the game [Inscryption](https://www.devolverdigital.com/games/inscryption) by Devolver Digital.
 
-## How to Play
+**How to Play**  
 Play horses, then mount heroes on them to build your army. Attack empty spaces on your opponent's side of the board to score points based on your card's attack power. Get the score meter up to 5 to win.
 
 # Screenshots
-
+![Screenshot 1](./screenshots/screenshot1.png)
 # Technologies Used
 - JavaScript (vanilla)
 - HTML
