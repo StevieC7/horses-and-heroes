@@ -151,17 +151,21 @@ h1 {
 .card-stats {
     display: flex;
     justify-content: space-between;
+    border: none !important;
 }
 .attack-power, .card-health {
     width: 25%;
+    font-size: 12px;
     background-color: white;
+    border: none !important;
 }
 .filled-slot {
     font-size: 8px;
     max-height: 100%;
     max-width: 100%;
-}
-.filled-slot img {
-    width: 50%;
-    height: auto;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

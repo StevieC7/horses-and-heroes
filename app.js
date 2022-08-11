@@ -147,6 +147,8 @@ const endTurn = () => {
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
+        playerPlayArea.style.marginBottom = "100px";
+        cpuPlayArea.style.marginTop = "100px";
         cpuAI();
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
@@ -154,6 +156,8 @@ const endTurn = () => {
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
+        playerPlayArea.style.marginBottom = "100px";
+        cpuPlayArea.style.marginTop = "100px";
         cpuAI();
         return;
     };
@@ -178,14 +182,14 @@ const cpuPlayAreaListener = () => {
         })
     }
 }
-cpuPlayArea.addEventListener("mouseover", event => {
-    for (let i = 0; i < cpuPlayArea.children.length; i++) {
-        if (event.target !== cpuPlayArea.children[i]) {
-            return;
-        };
-        inspectCard(cpuPlayAreaCards[i]);
-    };
-});
+// cpuPlayArea.addEventListener("mouseover", event => {
+//     for (let i = 0; i < cpuPlayArea.children.length; i++) {
+//         if (event.target !== cpuPlayArea.children[i]) {
+//             return;
+//         };
+//         inspectCard(cpuPlayAreaCards[i]);
+//     };
+// });
 const cpuAI = () => {
     if (turn !== turns[1]) {
         return;
@@ -247,9 +251,9 @@ const cpuAI = () => {
 const playerPlayAreaListener = () => {
     const playerPlayAreaChildren = playerPlayArea.children;
     for (let i = 0; i < playerPlayAreaChildren.length; i++) {
-        playerPlayAreaChildren[i].addEventListener("mouseover", () => {
-            inspectCard(playerPlayAreaCards[i]);
-        });
+        // playerPlayAreaChildren[i].addEventListener("mouseover", () => {
+        //     inspectCard(playerPlayAreaCards[i]);
+        // });
         playerPlayAreaChildren[i].addEventListener("click", (e) => {
             e.stopImmediatePropagation();
             // if not user's turn, do nothing
@@ -345,28 +349,28 @@ function fight() {
     if (currentPhase !== "Fight") {
         return;
     }
-        for (let i = 0; i < 3; i++) {
-            if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
-                score -= cpuPlayAreaCards[i].attack;
-                logEvent(`CPU's ${cpuPlayAreaCards[i].name} dealt you ${cpuPlayAreaCards[i].attack} damage.`);
-            };
-            if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
-                score += playerPlayAreaCards[i].attack;
-                logEvent(`Your ${playerPlayAreaCards[i].name} dealt the CPU ${playerPlayAreaCards[i].attack} damage.`);
-            };
-            if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
-                cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
-                logEvent(`Your ${playerPlayAreaCards[i].name} damaged CPU's ${cpuPlayAreaCards[i].name} for ${playerPlayAreaCards[i].attack}`);
-                playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
-                logEvent(`CPU's ${cpuPlayAreaCards[i].name} damaged your ${playerPlayAreaCards[i].name} for ${cpuPlayAreaCards[i].attack}`);
-            };
-            if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
-                playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
-            };
-            if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].health <= 0) {
-                cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
-            };
+    for (let i = 0; i < 3; i++) {
+        if (cpuPlayAreaCards[i] !== null && playerPlayAreaCards[i] === null) {
+            score -= cpuPlayAreaCards[i].attack;
+            logEvent(`CPU's ${cpuPlayAreaCards[i].name} dealt you ${cpuPlayAreaCards[i].attack} damage.`);
         };
+        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] === null) {
+            score += playerPlayAreaCards[i].attack;
+            logEvent(`Your ${playerPlayAreaCards[i].name} dealt the CPU ${playerPlayAreaCards[i].attack} damage.`);
+        };
+        if (playerPlayAreaCards[i] !== null && cpuPlayAreaCards[i] !== null) {
+            cpuPlayAreaCards[i].health = cpuPlayAreaCards[i].health - playerPlayAreaCards[i].attack;
+            logEvent(`Your ${playerPlayAreaCards[i].name} damaged CPU's ${cpuPlayAreaCards[i].name} for ${playerPlayAreaCards[i].attack}`);
+            playerPlayAreaCards[i].health = playerPlayAreaCards[i].health - cpuPlayAreaCards[i].attack;
+            logEvent(`CPU's ${cpuPlayAreaCards[i].name} damaged your ${playerPlayAreaCards[i].name} for ${cpuPlayAreaCards[i].attack}`);
+        };
+        if (playerPlayAreaCards[i] !== null && playerPlayAreaCards[i].health <= 0) {
+            playerPlayAreaCards.splice(playerPlayAreaCards.indexOf(playerPlayAreaCards[i]),1,"remove");
+        };
+        if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].health <= 0) {
+            cpuPlayAreaCards.splice(cpuPlayAreaCards.indexOf(cpuPlayAreaCards[i]),1,"remove");
+        };
+    };
     turn = turns[0];
     currentPhase = "Draw";
     setTimeout(() => {
@@ -374,6 +378,8 @@ function fight() {
         logEvent(`Now it's time to ${currentPhase}`);
     },200);
     render();
+    playerPlayArea.style.marginBottom = "0px";
+    cpuPlayArea.style.marginTop = "0px";
     return;
 };
 
@@ -450,7 +456,7 @@ function render() {
             const cpuPlayAreaCardElement = document.createElement("div");
             cpuPlayAreaCardElement.classList.add("card-slot","filled-slot");
             cpuPlayAreaCardElement.style.backgroundImage = `url(${val.art})`;
-            cpuPlayAreaCardElement.innerHTML = `<p>${val.name}</p><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div>`;
+            cpuPlayAreaCardElement.innerHTML = `<p>${val.name}</p><div class="card-stats"><div class=\"attack-power\">${val.attack}</div><div class=\"card-health\">${val.health}</div></div>`;
             cpuPlayAreaCardElements.splice(ind,0,cpuPlayAreaCardElement);
         };
         if (val === "remove") {
