@@ -147,8 +147,8 @@ const endTurn = () => {
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
-        playerPlayArea.style.marginBottom = "100px";
-        cpuPlayArea.style.marginTop = "100px";
+        // playerPlayArea.style.marginBottom = "100px";
+        // cpuPlayArea.style.marginTop = "100px";
         cpuAI();
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
@@ -156,8 +156,8 @@ const endTurn = () => {
         logEvent(`Now it's time to ${currentPhase}`);
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
-        playerPlayArea.style.marginBottom = "100px";
-        cpuPlayArea.style.marginTop = "100px";
+        // playerPlayArea.style.marginBottom = "100px";
+        // cpuPlayArea.style.marginTop = "100px";
         cpuAI();
         return;
     };
@@ -488,7 +488,11 @@ function render() {
     // STRETCH: update cpu hand graphics
     if (currentPhase === "Fight") {
         const fightDelay = (ms) => new Promise(resolve => setTimeout(resolve,ms));
-        fightDelay(3000).then(() => fight());
+        playerPlayArea.style.marginBottom = "100px";
+        cpuPlayArea.style.marginTop = "100px";
+        fightDelay(3000).then(() => {
+            fight();
+        });
     };
     while (scoreMeter.children.length > 1) {
         scoreMeter.removeChild(scoreMeter.lastChild);
