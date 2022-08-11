@@ -41,7 +41,7 @@ const aaron = new Card("Aaron",3,3,"It's pronounced A-A-ron!","https://placekitt
 aaron.addToCardList();
 const stinker = new Card("Stinker",1,3,"He's a little stinker, ain't he?","https://placekitten.com/200/300");
 stinker.addToCardList();
-const sirstabsalot = new Card("Sir Stabsalot",5,2,"The third spear is a bit excessive.","https://placekitten.com/200/300");
+const sirstabsalot = new Card("Sir Stabsalot",5,2,"He won't tell us where he keeps the knives.","https://placekitten.com/200/300");
 sirstabsalot.addToCardList();
 const stonewall = new Card("Stonewall",2,5,"Good at standing in the way.","https://placekitten.com/200/300");
 stonewall.addToCardList();
@@ -427,6 +427,7 @@ function init() {
 const logEvent = (message) => {
     const gameLogDisplay = document.createElement("p");
     gameLogDisplay.classList = "game-log-display";
+    gameLogDisplay.style.marginBottom = `${gameLog.clientHeight -100}px`;
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
     return;
