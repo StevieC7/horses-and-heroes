@@ -6,9 +6,11 @@ Play horses, then mount heroes on them to build your army. Attack empty spaces o
 
 # Screenshots
 **Start Screen:**
-![Screenshot 1](./screenshots/screenshot1.png
-**Player hand effect on hover:**
-https://user-images.githubusercontent.com/46426105/184241026-19c1224f-b908-4a13-a278-6186631330d1.mov
+![Screenshot 1](./screenshots/screenshot1.png)  
+**Mid-Game View**  
+![Screenshot 2](./screenshots/screenshot2.png)
+**Quick Demo:**
+![Screen Recording 1](./screenshots/screen-recording1.mov)
 
 # Technologies Used
 - JavaScript (vanilla)
