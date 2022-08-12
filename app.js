@@ -179,7 +179,6 @@ const cpuAI = () => {
         return;
     }
     cpuDrawCards();
-    console.log("CPU drew: " + cpuHandCards[cpuHandCards.length -1].name);
     logEvent("CPU drew a card.");
     let cpuHandHorses = [];
     for (let i = 0; i < cpuHandCards.length; i++) {
@@ -187,7 +186,6 @@ const cpuAI = () => {
             cpuHandHorses.push(i);
         };
     };
-    console.log(cpuHandHorses);
     let openSlots = [];
     if (cpuHandHorses.length >= 1) {
         for (let i = 0; i < cpuPlayAreaCards.length;i++) {
@@ -196,43 +194,31 @@ const cpuAI = () => {
             };
         };
     };
-    console.log(openSlots);
     let horsePlayIterator = 0;
     while (horsePlayIterator < cpuHandHorses.length && horsePlayIterator < openSlots.length) {
-        console.log("horseplay while loop running on cpuPlayArea " + openSlots[horsePlayIterator] + " and inserting " + cpuHandCards[cpuHandHorses[horsePlayIterator]]);
         cpuPlayAreaCards.splice(openSlots[horsePlayIterator],1,cloneCards(cpuHandCards[cpuHandHorses[horsePlayIterator]]));
-        console.log("CPU playing " + cpuHandCards[cpuHandHorses[horsePlayIterator]].name);
         logEvent(`CPU played ${cpuHandCards[cpuHandHorses[horsePlayIterator]].name}`);
         horsePlayIterator++;
     };
     for (let i = 0; i < cpuHandHorses.length; i++) {
-        console.log("Removing horse at " + cpuHandHorses[i] + " from hand.");
         cpuHandCards.splice(cpuHandHorses[i],1);
     };
     let cpuHandHeroes = [];
     for (let i = 0; i < cpuHandCards.length; i++) {
         cpuHandHeroes.push(i);
-        console.log("CPU found hero at " + cpuHandHeroes[i]);
     };
     cpuHandHeroes.sort((a,b) => a.attack - b.attack);
     for (let i = 0; i < cpuPlayAreaCards.length;i++) {
-        console.log("CPU looking for horse to play hero on");
         if (cpuPlayAreaCards[i] !== null && cpuPlayAreaCards[i].name === "Horse") {
             cpuPlayAreaCards.splice(i,1,cloneCards(cpuHandCards[i]));
-            console.log("CPU hand cards before playing" + cpuHandCards);
-            console.log("CPU played " + cpuHandCards[i].name);
             logEvent(`CPU played ${cpuHandCards[i].name}`);
             cpuHandCards.splice(cpuHandCards.indexOf(cpuHandHeroes[i]),1);
-            console.log("CPU hand cards after playing" + cpuHandCards);
-            console.log("CPU removed card " + cpuHandCards[cpuHandHeroes[i]].name + " at " + cpuHandHeroes[i]);
         };
     };
-    console.log("CPU now has " + cpuHandCards.length + " cards.");
 };
 const playerPlayAreaListener = () => {
     const playerPlayAreaChildren = playerPlayArea.children;
     for (let i = 0; i < playerPlayAreaChildren.length; i++) {
-        console.log("Adding event listener to " + playerPlayAreaChildren[i]);
         playerPlayAreaChildren[i].addEventListener("click", (e) => {
             e.stopImmediatePropagation();
             if (turn !== "Player") {
@@ -371,10 +357,8 @@ function render() {
     };
     while (cardInspection.lastChild) {
         cardInspection.removeChild(cardInspection.lastChild);
-        console.log("Removing last child of card inspection.")
     };
     if (inspectedCard !== null && inspectedCard !== undefined) {
-        console.log("Rendering inspected card: " + inspectedCard.name);
         const inspectedCardElement = document.createElement("div");
         const inspectedCardDescription = document.createElement("div");
         inspectedCardDescription.id = "inspected-card-description";
