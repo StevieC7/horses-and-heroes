@@ -4,6 +4,14 @@ body {
     justify-content: center;
     align-items: center;
 }
+header {
+    text-align: center;
+    padding-bottom: 15px;
+}
+header button {
+    background-color: antiquewhite;
+    color: black;
+}
 #grid-wrapper {
     display: grid;
     grid-template-columns: repeat(7, 140px);
