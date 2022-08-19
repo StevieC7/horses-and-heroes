@@ -65,6 +65,7 @@ const drawHorse = () => {
     logEvent(`You drew ${playerHandCards[playerHandCards.length - 1].name}`);
     currentPhase = phases[2];
     logEvent(`Now it's time to ${currentPhase}`);
+    render();
     return;
 };
 const drawHero = () => {
@@ -78,12 +79,15 @@ const drawHero = () => {
     } else {
         alert("You don't have any hero cards to draw.");
     };
+    render();
 };
 const inspectCard = (card) => {
     inspectedCard = card;
+    render();
 };
 const selectCard = (card) => {
     selectedCard = card;
+    render();
 };
 const randomizeHorseDeck = () => {
     let horseDeckClone = [];
@@ -144,6 +148,7 @@ const endTurn = () => {
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
         cpuAI();
+        render();
         return;
     } else if (turn === turns[0] && currentPhase === phases[1]) {
         currentPhase = phases[3];
@@ -151,6 +156,7 @@ const endTurn = () => {
         turn = turns[1];
         logEvent(`Turn: ${turn}`);
         cpuAI();
+        render();
         return;
     };
 };
@@ -160,6 +166,7 @@ const playerHandListener = () => {
         playerHandChildren[i].addEventListener("click", () => {
             inspectCard(playerHandCards[i]);
             selectCard(playerHandCards[i]);
+            render();
         });
     };
 };
@@ -168,6 +175,7 @@ const cpuPlayAreaListener = () => {
     for (let i = 0; i < cpuPlayAreaChildren.length; i++) {
         cpuPlayAreaChildren[i].addEventListener("click", () => {
             inspectCard(cpuPlayAreaCards[i]);
+            render();
         })
     }
 }
@@ -235,11 +243,13 @@ const playerPlayAreaListener = () => {
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
                 inspectedCard = null;
+                render();
                 return;
             };
             if (playerPlayAreaCards[i] !== null && selectedCard.name === "Horse") {
                 selectedCard = null;
                 inspectedCard = null;
+                render();
                 return;
             };
             if (playerPlayAreaCards[i].name === "Horse" && selectedCard.name !== "Horse") {
@@ -247,12 +257,14 @@ const playerPlayAreaListener = () => {
                 playerHandCards.splice(playerHandCards.indexOf(selectedCard),1);
                 selectedCard = null;
                 inspectedCard = null;
+                render();
                 return;
             };
             if (playerPlayAreaCards[i] === null && selectedCard.name !== "Horse") {
                 alert("You cannot play heroes directly to the board. You must first play a horse, then replace it with a hero.");
                 selectedCard = null;
                 inspectedCard = null;
+                render();
                 return;
             };
         });
@@ -283,6 +295,7 @@ const logEvent = (message) => {
     gameLogDisplay.style.marginBottom = "10px";
     gameLogDisplay.innerHTML = message;
     gameLogQueue.push(gameLogDisplay);
+    render();
     return;
 }
 startButton.addEventListener("click", () => {init()});
@@ -334,13 +347,11 @@ function fight() {
     };
     turn = turns[0];
     currentPhase = "Draw";
-    setTimeout(() => {
-        logEvent(`Turn: ${turn}`);
-        logEvent(`Now it's time to ${currentPhase}`);
-    },200);
-    render();
+    logEvent(`Turn: ${turn}`);
+    logEvent(`Now it's time to ${currentPhase}`);
     playerPlayArea.style.marginBottom = "0px";
     cpuPlayArea.style.marginTop = "0px";
+    render();
     return;
 };
 
@@ -465,7 +476,6 @@ function render() {
     };
     setTimeout(() => {
         if (score < -4) {
-            endGame();
             const gameOverLose = document.createElement("div");
             gameOverLose.classList = "game-over";
             gameOverLose.innerHTML = `You Lose<br><button id="reset-button">Play Again</button>`;
@@ -477,7 +487,6 @@ function render() {
             resetButton.addEventListener("click", () => {resetGame()});
         };
         if (score > 4) {
-            endGame();
             const gameOverWin = document.createElement("div");
             gameOverWin.classList = "game-over";
             gameOverWin.innerHTML = `You Win<br><button id="reset-button">Play Again</button>`;
@@ -491,8 +500,3 @@ function render() {
     },500);
     gameLog.scrollTo(0, gameLog.scrollHeight);
 };
-let renderCycle = setInterval(() => requestAnimationFrame(render),1000);
-function endGame() {
-    clearInterval(renderCycle);
-    renderCycle = null;
-}
